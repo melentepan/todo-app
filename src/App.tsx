@@ -1,8 +1,10 @@
+import AddTodo from './components/AddTodo/AddTodo'
+
 function App() {
   return (
-    <div>
-      <h1>Todo App</h1>
-    </div>
+    <>
+      <AddTodo />
+    </>
   )
 }
 
