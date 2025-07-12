@@ -1,18 +1,7 @@
-import { Divider, Input, Button, Flex } from 'antd'
-import styled from 'styled-components'
+import { Input, Button, Flex } from 'antd'
+import CustomDivider from '../CustomDivider/CustomDivider'
 
 const { TextArea } = Input
-
-const CustomDivider = styled(Divider)`
-  && {
-    border-color: black;
-  }
-
-  && .ant-divider-inner-text {
-    font-size: 24px;
-    color: black;
-  }
-`
 
 export default function AddTodo() {
   return (
