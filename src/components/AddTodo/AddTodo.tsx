@@ -5,7 +5,7 @@ const { TextArea } = Input
 
 export default function AddTodo() {
   return (
-    <>
+    <div>
       <CustomDivider>Add task</CustomDivider>
       <Flex vertical gap={10}>
         <Input size='large' placeholder='Task title' />
@@ -18,6 +18,6 @@ export default function AddTodo() {
           Add task
         </Button>
       </Flex>
-    </>
+    </div>
   )
 }
