@@ -1,34 +1,21 @@
 import CustomDivider from '../CustomDivider/CustomDivider'
 import { List } from 'antd'
 import TodoItem from '../TodoItem/TodoItem'
+import type { Todo } from '../../types'
 
-const data = [
-  {
-    title: 'Ant Design Title 1',
-    description: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-    description: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-    description: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-    description: 'Ant Design Title 4',
-  },
-]
+interface TodoListProps {
+  todosList: Todo[]
+  setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
+}
 
-export default function TodoList() {
+export default function TodoList({ todosList, setTodosList }: TodoListProps) {
   return (
     <div>
       <CustomDivider>Task list</CustomDivider>
       <List
         itemLayout='horizontal'
-        dataSource={data}
-        renderItem={(item) => TodoItem(item)}
+        dataSource={todosList}
+        renderItem={(item) => TodoItem({ item, setTodosList })}
       />
     </div>
   )
