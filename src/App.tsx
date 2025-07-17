@@ -4,6 +4,17 @@ import TodoList from './components/TodoList/TodoList'
 import { useState } from 'react'
 import type { Todo } from './types'
 import PopUp from './components/Modal/PopUp'
+import styled from 'styled-components'
+
+const AppWrapper = styled.div`
+  height: calc(100vh - 20px);
+  max-width: 600px;
+  padding: 0 15px;
+  border-left: 3px solid #1777ff;
+  border-right: 3px solid #1777ff;
+  margin: 0 auto;
+  overflow: auto;
+`
 
 function App() {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
@@ -18,7 +29,7 @@ function App() {
   )
 
   return (
-    <>
+    <AppWrapper>
       <Flex vertical gap={15}>
         <AddTodo setTodosList={setTodosList} />
         <TodoList
@@ -32,7 +43,7 @@ function App() {
         setEditingTodo={setEditingTodo}
         setTodosList={setTodosList}
       />
-    </>
+    </AppWrapper>
   )
 }
 
