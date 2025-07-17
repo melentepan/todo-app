@@ -6,16 +6,21 @@ import type { Todo } from '../../types'
 interface TodoListProps {
   todosList: Todo[]
   setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
+  setEditingTodo: React.Dispatch<React.SetStateAction<Todo | null>>
 }
 
-export default function TodoList({ todosList, setTodosList }: TodoListProps) {
+export default function TodoList({
+  todosList,
+  setTodosList,
+  setEditingTodo,
+}: TodoListProps) {
   return (
     <div>
       <CustomDivider>Task list</CustomDivider>
       <List
         itemLayout='horizontal'
         dataSource={todosList}
-        renderItem={(item) => TodoItem({ item, setTodosList })}
+        renderItem={(item) => TodoItem({ item, setTodosList, setEditingTodo })}
       />
     </div>
   )

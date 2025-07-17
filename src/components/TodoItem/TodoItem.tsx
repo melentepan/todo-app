@@ -6,6 +6,7 @@ import styled from 'styled-components'
 interface TodoItemProps {
   item: Todo
   setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
+  setEditingTodo: React.Dispatch<React.SetStateAction<Todo | null>>
 }
 
 interface StyledTodoItemProps {
@@ -41,7 +42,11 @@ const TodoDescription = styled.p<StyledTodoItemProps>`
   opacity: ${({ $checked }) => ($checked ? '0.5' : '1')};
 `
 
-export default function TodoItem({ item, setTodosList }: TodoItemProps) {
+export default function TodoItem({
+  item,
+  setTodosList,
+  setEditingTodo,
+}: TodoItemProps) {
   const isChecked = item.completed
 
   function checkboxHandler() {
@@ -54,7 +59,9 @@ export default function TodoItem({ item, setTodosList }: TodoItemProps) {
     )
   }
 
-  function editTodoHandler() {}
+  function editTodoHandler() {
+    setEditingTodo(item)
+  }
 
   function deleteTodoHandler() {
     setTodosList((prev) => prev.filter((todoItem) => todoItem.id !== item.id))
