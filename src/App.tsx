@@ -1,24 +1,15 @@
-import { Flex } from 'antd'
+import { Button, Flex } from 'antd'
 import AddTodo from './components/AddTodo/AddTodo'
 import TodoList from './components/TodoList/TodoList'
 import { useState } from 'react'
 import type { Todo } from './types'
 import PopUp from './components/Modal/PopUp'
-import styled from 'styled-components'
-
-const AppWrapper = styled.div`
-  height: calc(100vh - 20px);
-  max-width: 600px;
-  padding: 0 15px;
-  border-left: 3px solid #1777ff;
-  border-right: 3px solid #1777ff;
-  margin: 0 auto;
-  overflow: auto;
-`
+import { MoonFilled, SunFilled } from '@ant-design/icons'
+import AppWrapper from './components/AppWrapper/AppWrapper'
 
 function App() {
+  const [isDark, setIsDark] = useState(false)
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
-
   const [todosList, setTodosList] = useState<Todo[]>(
     Array.from({ length: 15 }, (_, i) => ({
       id: i + 1,
@@ -29,8 +20,19 @@ function App() {
   )
 
   return (
-    <AppWrapper>
-      <Flex vertical gap={15}>
+    <AppWrapper isDark={isDark}>
+      <Flex vertical>
+        <Button
+          type='primary'
+          shape='circle'
+          size='large'
+          onClick={() => {
+            setIsDark((prev) => !prev)
+          }}
+          style={{ alignSelf: 'center', marginTop: '5px' }}
+        >
+          {isDark ? <SunFilled /> : <MoonFilled />}
+        </Button>
         <AddTodo setTodosList={setTodosList} />
         <TodoList
           todosList={todosList}

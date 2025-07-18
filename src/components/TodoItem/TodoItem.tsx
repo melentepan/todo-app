@@ -1,5 +1,5 @@
-import { CheckOutlined, DeleteFilled, EditFilled } from '@ant-design/icons'
-import { Button, Flex, Space } from 'antd'
+import { DeleteFilled, EditFilled } from '@ant-design/icons'
+import { Button, Checkbox, Flex, Space } from 'antd'
 import type { Todo } from '../../types'
 import styled from 'styled-components'
 
@@ -15,24 +15,11 @@ interface StyledTodoItemProps {
 
 const TodoItemWrapper = styled(Flex)<StyledTodoItemProps>`
   padding: 10px;
-  border: 2px solid ${({ $checked }) => ($checked ? '#1777ffa0' : '#1777ff')};
+  border: 2px solid
+    ${({ $checked, theme }) =>
+      $checked ? theme.primary + '80' : theme.primary};
   border-radius: 10px;
   margin-bottom: 8px;
-`
-
-const TodoCheckbox = styled(Button)<StyledTodoItemProps>`
-  background-color: ${({ $checked }) => ($checked ? '#1777ff' : 'transparent')};
-  color: ${({ $checked }) => ($checked ? 'white' : 'transparent')};
-  border: 2px solid #1777ff;
-
-  svg {
-    scale: 1.25;
-  }
-
-  &:hover {
-    color: ${({ $checked }) =>
-      $checked ? 'transparent' : '#1777ff80'} !important;
-  }
 `
 
 const TodoDescription = styled.p<StyledTodoItemProps>`
@@ -42,13 +29,16 @@ const TodoDescription = styled.p<StyledTodoItemProps>`
   opacity: ${({ $checked }) => ($checked ? '0.5' : '1')};
 `
 
+const TodoCheckBox = styled(Checkbox)`
+  scale: 1.25;
+  margin-left: 2px;
+`
+
 export default function TodoItem({
   item,
   setTodosList,
   setEditingTodo,
 }: TodoItemProps) {
-  const isChecked = item.completed
-
   function checkboxHandler() {
     setTodosList((prev) =>
       prev.map((todoItem) =>
@@ -69,19 +59,14 @@ export default function TodoItem({
 
   return (
     <TodoItemWrapper
-      $checked={isChecked}
+      $checked={item.completed}
       align='center'
       justify='space-between'
       gap={20}
     >
-      <Space>
-        <TodoCheckbox
-          $checked={isChecked}
-          shape='circle'
-          icon={<CheckOutlined />}
-          onClick={checkboxHandler}
-        />
-        <TodoDescription $checked={isChecked}>{item.text}</TodoDescription>
+      <Space size={10}>
+        <TodoCheckBox onChange={checkboxHandler} checked={item.completed} />
+        <TodoDescription $checked={item.completed}>{item.text}</TodoDescription>
       </Space>
       <Space>
         <Button

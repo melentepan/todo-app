@@ -7,19 +7,14 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
-  html, body {
+body {
     height: 100%;
     font-family: sans-serif;
     transition: background 0.3s ease, color 0.3s ease;
-  }
-
-body {
-  padding: 10px
-}
-
-  button {
-    font-family: inherit;
-    cursor: pointer;
+    background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 10px;
   }
 `
 
