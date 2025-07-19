@@ -1,23 +1,35 @@
 import { Button, Flex } from 'antd'
 import AddTodo from './components/AddTodo/AddTodo'
 import TodoList from './components/TodoList/TodoList'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Todo } from './types'
 import PopUp from './components/Modal/PopUp'
 import { MoonFilled, SunFilled } from '@ant-design/icons'
 import AppWrapper from './components/AppWrapper/AppWrapper'
+import {
+  loadIsDarkTheme,
+  loadTodosList,
+  saveIsDarkTheme,
+  saveTodosList,
+} from './utils/localStorage'
 
 function App() {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(loadIsDarkTheme())
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
-  const [todosList, setTodosList] = useState<Todo[]>(
-    Array.from({ length: 15 }, (_, i) => ({
-      id: i + 1,
-      text: `Task #${i + 1}`,
-      completed: Math.random() < 0.5,
-      createdAt: new Date(Date.now() - Math.floor(Math.random() * 1000000000)),
-    }))
-  )
+  const [todosList, setTodosList] = useState<Todo[]>(loadTodosList())
+
+  function changeThemeHandler() {
+    const newValue = !isDark
+    setIsDark(newValue)
+  }
+
+  useEffect(() => {
+    saveIsDarkTheme(isDark)
+  }, [isDark])
+
+  useEffect(() => {
+    saveTodosList(todosList)
+  }, [todosList])
 
   return (
     <AppWrapper isDark={isDark}>
@@ -26,9 +38,7 @@ function App() {
           type='primary'
           shape='circle'
           size='large'
-          onClick={() => {
-            setIsDark((prev) => !prev)
-          }}
+          onClick={changeThemeHandler}
           style={{ alignSelf: 'center', marginTop: '5px' }}
         >
           {isDark ? <SunFilled /> : <MoonFilled />}
