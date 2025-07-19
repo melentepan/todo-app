@@ -3,7 +3,7 @@ import AddTodo from './components/AddTodo/AddTodo'
 import TodoList from './components/TodoList/TodoList'
 import { useEffect, useState } from 'react'
 import type { Todo } from './types'
-import PopUp from './components/Modal/PopUp'
+import EditPopUp from './components/EditPopUp/EditPopUp'
 import { MoonFilled, SunFilled } from '@ant-design/icons'
 import AppWrapper from './components/AppWrapper/AppWrapper'
 import {
@@ -50,7 +50,7 @@ function App() {
           setEditingTodo={setEditingTodo}
         />
       </Flex>
-      <PopUp
+      <EditPopUp
         editingTodo={editingTodo}
         setEditingTodo={setEditingTodo}
         setTodosList={setTodosList}

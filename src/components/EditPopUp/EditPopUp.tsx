@@ -1,7 +1,8 @@
-import { Input, Modal } from 'antd'
+import { Modal } from 'antd'
 import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import type { Todo } from '../../types'
+import ValidatedInput from '../ValidatedInput/ValidatedInput'
 
 interface PopUpProps {
   editingTodo: Todo | null
@@ -9,12 +10,13 @@ interface PopUpProps {
   setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
 }
 
-export default function PopUp({
+export default function EditPopUp({
   editingTodo,
   setEditingTodo,
   setTodosList,
 }: PopUpProps) {
   const [inputValue, setInputValue] = useState('')
+  const [isValid, setIsValid] = useState(true)
 
   useEffect(() => {
     if (editingTodo) {
@@ -23,18 +25,27 @@ export default function PopUp({
   }, [editingTodo])
 
   const handleEdit = () => {
-    setTodosList((prev) =>
-      prev.map((todoItem) =>
-        todoItem.id === editingTodo?.id
-          ? { ...todoItem, text: inputValue }
-          : todoItem
+    if (inputValue.trim() !== '') {
+      setTodosList((prev) =>
+        prev.map((todoItem) =>
+          todoItem.id === editingTodo?.id
+            ? { ...todoItem, text: inputValue }
+            : todoItem
+        )
       )
-    )
-    setEditingTodo(null)
+      setEditingTodo(null)
+    } else {
+      setIsValid(false)
+    }
   }
 
   const handleCancel = () => {
     setEditingTodo(null)
+  }
+
+  function onChangeHandler(newValue: string) {
+    setInputValue(newValue)
+    setIsValid(true)
   }
 
   if (editingTodo === null) return null
@@ -49,13 +60,11 @@ export default function PopUp({
       cancelText='Отменить'
       onCancel={handleCancel}
     >
-      <Input
-        size='large'
-        showCount
-        maxLength={50}
-        placeholder='Task'
-        value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
+      <ValidatedInput
+        isValid={isValid}
+        inputValue={inputValue}
+        onChange={onChangeHandler}
+        onFocus={() => setIsValid(true)}
       />
     </Modal>,
     document.body
