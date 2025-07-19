@@ -20,7 +20,14 @@ export default function TodoList({
       <List
         itemLayout='horizontal'
         dataSource={todosList}
-        renderItem={(item) => TodoItem({ item, setTodosList, setEditingTodo })}
+        renderItem={(item) => (
+          <TodoItem
+            key={item.id}
+            item={item}
+            setTodosList={setTodosList}
+            setEditingTodo={setEditingTodo}
+          />
+        )}
       />
     </div>
   )
