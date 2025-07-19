@@ -20,6 +20,7 @@ const TodoItemWrapper = styled(Flex)<StyledTodoItemProps>`
       $checked ? theme.primary + '80' : theme.primary};
   border-radius: 10px;
   margin-bottom: 8px;
+  transition: border-color 0.3s ease;
 `
 
 const TodoDescription = styled.p<StyledTodoItemProps>`
@@ -27,6 +28,7 @@ const TodoDescription = styled.p<StyledTodoItemProps>`
   word-break: break-word;
   text-decoration-line: ${({ $checked }) => ($checked ? 'line-through' : '')};
   opacity: ${({ $checked }) => ($checked ? '0.5' : '1')};
+  transition: opacity 0.3s ease;
 `
 
 const TodoCheckBox = styled(Checkbox)`
