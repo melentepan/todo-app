@@ -1,7 +1,11 @@
 import CustomDivider from '../CustomDivider/CustomDivider'
-import { Empty, List } from 'antd'
+import { Button, Empty, Flex, List } from 'antd'
 import TodoItem from '../TodoItem/TodoItem'
-import type { Todo } from '../../types'
+import type { StatusType, Todo } from '../../types'
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import { statusCycle, statusText } from '../../constants'
+import todoSorting from '../../utils/todoSorting'
 
 interface TodoListProps {
   todosList: Todo[]
@@ -14,12 +18,55 @@ export default function TodoList({
   setTodosList,
   setEditingTodo,
 }: TodoListProps) {
+  const [{ status, order }, setSortOptions] = useState<{
+    status: StatusType
+    order: 'asc' | 'desc'
+  }>({
+    status: 'date',
+    order: 'asc',
+  })
+
+  function orderButtonHandler() {
+    if (order === 'asc') {
+      setSortOptions((prev) => ({ ...prev, order: 'desc' }))
+    } else {
+      setSortOptions((prev) => ({ ...prev, order: 'asc' }))
+    }
+  }
+
+  function statusButtonHandler() {
+    setSortOptions((prev) => {
+      const currentIndex = statusCycle.indexOf(prev.status)
+      const nextIndex = (currentIndex + 1) % statusCycle.length
+      return { ...prev, status: statusCycle[nextIndex] }
+    })
+  }
+
   return (
     <>
       <CustomDivider>Список задач</CustomDivider>
+      <Flex gap={10}>
+        <Button
+          size='large'
+          type='primary'
+          style={{ width: '100%' }}
+          onClick={statusButtonHandler}
+        >
+          {statusText[status]}
+        </Button>
+        <Button
+          size='large'
+          type='primary'
+          shape='circle'
+          disabled={status !== 'date' && status !== 'text'}
+          icon={order === 'asc' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+          onClick={orderButtonHandler}
+        />
+      </Flex>
       <List
+        style={{ marginTop: '20px' }}
         itemLayout='horizontal'
-        dataSource={todosList}
+        dataSource={todoSorting(todosList, status, order)}
         locale={{
           emptyText: (
             <Empty
