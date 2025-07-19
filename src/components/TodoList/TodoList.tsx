@@ -1,5 +1,5 @@
 import CustomDivider from '../CustomDivider/CustomDivider'
-import { List } from 'antd'
+import { Empty, List } from 'antd'
 import TodoItem from '../TodoItem/TodoItem'
 import type { Todo } from '../../types'
 
@@ -15,11 +15,19 @@ export default function TodoList({
   setEditingTodo,
 }: TodoListProps) {
   return (
-    <div>
-      <CustomDivider>Task list</CustomDivider>
+    <>
+      <CustomDivider>Список задач</CustomDivider>
       <List
         itemLayout='horizontal'
         dataSource={todosList}
+        locale={{
+          emptyText: (
+            <Empty
+              description='Список задач пуст'
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          ),
+        }}
         renderItem={(item) => (
           <TodoItem
             key={item.id}
@@ -29,6 +37,6 @@ export default function TodoList({
           />
         )}
       />
-    </div>
+    </>
   )
 }

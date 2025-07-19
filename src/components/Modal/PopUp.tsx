@@ -40,12 +40,13 @@ export default function PopUp({
   if (editingTodo === null) return null
   return ReactDOM.createPortal(
     <Modal
-      title='Edit task'
+      title='Изменить задачу'
       open={editingTodo !== null}
       closable
       centered
       onOk={handleEdit}
-      okText='Edit'
+      okText='Изменить'
+      cancelText='Отменить'
       onCancel={handleCancel}
     >
       <Input

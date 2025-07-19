@@ -29,18 +29,18 @@ export default function AddTodo({ setTodosList }: AddTodoProps) {
 
   return (
     <div>
-      <CustomDivider>Add task</CustomDivider>
+      <CustomDivider>Добавить задачу</CustomDivider>
       <Flex vertical gap={10}>
         <Input
           size='large'
           showCount
           maxLength={50}
-          placeholder='Task'
+          placeholder='Задача'
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
         />
         <Button size='large' type='primary' onClick={() => addTaskHandler()}>
-          Add task
+          Добавить задачу
         </Button>
       </Flex>
     </div>
