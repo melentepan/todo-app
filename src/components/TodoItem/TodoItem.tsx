@@ -76,6 +76,7 @@ export default function TodoItem({
           shape='circle'
           size='large'
           onClick={editTodoHandler}
+          disabled={item.completed}
         >
           <EditFilled />
         </Button>
