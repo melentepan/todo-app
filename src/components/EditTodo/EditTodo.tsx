@@ -1,8 +1,9 @@
 import { Modal } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import type { Todo } from '../../types'
 import ValidatedInput from '../ValidatedInput/ValidatedInput'
+import { useInput } from '../../hooks/useInput'
 
 interface EditTodoProps {
   editingTodo: Todo | null
@@ -15,17 +16,17 @@ export default function EditTodo({
   setEditingTodo,
   setTodosList,
 }: EditTodoProps) {
-  const [inputValue, setInputValue] = useState('')
-  const [isValid, setIsValid] = useState(true)
+  const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
+    useInput('')
 
   useEffect(() => {
     if (editingTodo) {
       setInputValue(editingTodo.text)
     }
-  }, [editingTodo])
+  }, [editingTodo, setInputValue])
 
   const handleEdit = () => {
-    if (inputValue.trim() !== '') {
+    if (validate()) {
       setTodosList((prev) =>
         prev.map((todoItem) =>
           todoItem.id === editingTodo?.id
@@ -34,18 +35,11 @@ export default function EditTodo({
         )
       )
       setEditingTodo(null)
-    } else {
-      setIsValid(false)
     }
   }
 
   const handleCancel = () => {
     setEditingTodo(null)
-  }
-
-  function onChangeHandler(newValue: string) {
-    setInputValue(newValue)
-    setIsValid(true)
   }
 
   if (editingTodo === null) return null
@@ -63,7 +57,7 @@ export default function EditTodo({
       <ValidatedInput
         isValid={isValid}
         inputValue={inputValue}
-        onChange={onChangeHandler}
+        onChange={onChange}
         onFocus={() => setIsValid(true)}
       />
     </Modal>,

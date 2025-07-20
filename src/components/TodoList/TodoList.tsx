@@ -22,7 +22,7 @@ export default function TodoList({
     status: StatusType
     order: 'asc' | 'desc'
   }>({
-    status: 'date',
+    status: statusCycle[0],
     order: 'asc',
   })
 
@@ -43,7 +43,7 @@ export default function TodoList({
   }
 
   return (
-    <>
+    <section>
       <CustomDivider>Список задач</CustomDivider>
       <Flex gap={10}>
         <Button
@@ -84,6 +84,6 @@ export default function TodoList({
           />
         )}
       />
-    </>
+    </section>
   )
 }

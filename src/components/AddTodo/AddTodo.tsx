@@ -1,19 +1,19 @@
 import { Button, Flex } from 'antd'
 import CustomDivider from '../CustomDivider/CustomDivider'
 import type { Todo } from '../../types'
-import { useState } from 'react'
 import ValidatedInput from '../ValidatedInput/ValidatedInput'
+import { useInput } from '../../hooks/useInput'
 
 interface AddTodoProps {
   setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
 }
 
 export default function AddTodo({ setTodosList }: AddTodoProps) {
-  const [inputValue, setInputValue] = useState('')
-  const [isValid, setIsValid] = useState(true)
+  const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
+    useInput('')
 
   function addTaskHandler() {
-    if (inputValue.trim() !== '') {
+    if (validate()) {
       const newTodo: Todo = {
         id: Date.now(),
         text: inputValue,
@@ -26,30 +26,23 @@ export default function AddTodo({ setTodosList }: AddTodoProps) {
       })
 
       setInputValue('')
-    } else {
-      setIsValid(false)
     }
   }
 
-  function onChangeHandler(newValue: string) {
-    setInputValue(newValue)
-    setIsValid(true)
-  }
-
   return (
-    <div>
+    <section>
       <CustomDivider>Добавить задачу</CustomDivider>
       <Flex vertical gap={10}>
         <ValidatedInput
           isValid={isValid}
           inputValue={inputValue}
-          onChange={onChangeHandler}
+          onChange={onChange}
           onFocus={() => setIsValid(true)}
         />
         <Button size='large' type='primary' onClick={() => addTaskHandler()}>
           Добавить задачу
         </Button>
       </Flex>
-    </div>
+    </section>
   )
 }

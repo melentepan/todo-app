@@ -19,8 +19,7 @@ function App() {
   const [todosList, setTodosList] = useState<Todo[]>(loadTodosList())
 
   function changeThemeHandler() {
-    const newValue = !isDark
-    setIsDark(newValue)
+    setIsDark((prev) => !prev)
   }
 
   useEffect(() => {
