@@ -1,34 +1,20 @@
 import { Button, Flex } from 'antd'
 import AddTodo from './components/AddTodo/AddTodo'
 import TodoList from './components/TodoList/TodoList'
-import { useEffect, useState } from 'react'
-import type { Todo } from './types'
 import EditTodo from './components/EditTodo/EditTodo'
 import { MoonFilled, SunFilled } from '@ant-design/icons'
 import AppWrapper from './components/AppWrapper/AppWrapper'
-import {
-  loadIsDarkTheme,
-  loadTodosList,
-  saveIsDarkTheme,
-  saveTodosList,
-} from './utils/localStorage'
+import { useDispatch } from 'react-redux'
+import { switchTheme } from './store/theme/theme.slice'
+import useTheme from './hooks/useTheme'
 
 function App() {
-  const [isDark, setIsDark] = useState(loadIsDarkTheme())
-  const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
-  const [todosList, setTodosList] = useState<Todo[]>(loadTodosList())
+  const dispatch = useDispatch()
+  const { isDark } = useTheme()
 
   function changeThemeHandler() {
-    setIsDark((prev) => !prev)
+    dispatch(switchTheme())
   }
-
-  useEffect(() => {
-    saveIsDarkTheme(isDark)
-  }, [isDark])
-
-  useEffect(() => {
-    saveTodosList(todosList)
-  }, [todosList])
 
   return (
     <AppWrapper isDark={isDark}>
@@ -42,18 +28,10 @@ function App() {
         >
           {isDark ? <SunFilled /> : <MoonFilled />}
         </Button>
-        <AddTodo setTodosList={setTodosList} />
-        <TodoList
-          todosList={todosList}
-          setTodosList={setTodosList}
-          setEditingTodo={setEditingTodo}
-        />
+        <AddTodo />
+        <TodoList />
       </Flex>
-      <EditTodo
-        editingTodo={editingTodo}
-        setEditingTodo={setEditingTodo}
-        setTodosList={setTodosList}
-      />
+      <EditTodo />
     </AppWrapper>
   )
 }

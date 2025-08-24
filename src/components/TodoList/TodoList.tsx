@@ -1,45 +1,28 @@
 import CustomDivider from '../CustomDivider/CustomDivider'
 import { Button, Empty, Flex, List } from 'antd'
 import TodoItem from '../TodoItem/TodoItem'
-import type { StatusType, Todo } from '../../types'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
-import { useState } from 'react'
-import { statusCycle, statusText } from '../../constants'
+import { statusText } from '../../constants'
 import todoSorting from '../../utils/todoSorting'
+import useTodoList from '../../hooks/useTodoList'
+import { useDispatch } from 'react-redux'
+import {
+  switchOrder,
+  switchStatus,
+} from '../../store/sortingTodoList/sortingTodoList.slice'
+import useSortingTodoList from '../../hooks/useSortingTodoList'
 
-interface TodoListProps {
-  todosList: Todo[]
-  setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
-  setEditingTodo: React.Dispatch<React.SetStateAction<Todo | null>>
-}
-
-export default function TodoList({
-  todosList,
-  setTodosList,
-  setEditingTodo,
-}: TodoListProps) {
-  const [{ status, order }, setSortOptions] = useState<{
-    status: StatusType
-    order: 'asc' | 'desc'
-  }>({
-    status: statusCycle[0],
-    order: 'asc',
-  })
+export default function TodoList() {
+  const { todoList } = useTodoList()
+  const dispatch = useDispatch()
+  const { status, order } = useSortingTodoList()
 
   function orderButtonHandler() {
-    if (order === 'asc') {
-      setSortOptions((prev) => ({ ...prev, order: 'desc' }))
-    } else {
-      setSortOptions((prev) => ({ ...prev, order: 'asc' }))
-    }
+    dispatch(switchOrder())
   }
 
   function statusButtonHandler() {
-    setSortOptions((prev) => {
-      const currentIndex = statusCycle.indexOf(prev.status)
-      const nextIndex = (currentIndex + 1) % statusCycle.length
-      return { ...prev, status: statusCycle[nextIndex] }
-    })
+    dispatch(switchStatus())
   }
 
   return (
@@ -66,7 +49,7 @@ export default function TodoList({
       <List
         style={{ marginTop: '20px' }}
         itemLayout='horizontal'
-        dataSource={todoSorting(todosList, status, order)}
+        dataSource={todoSorting(todoList, status, order)}
         locale={{
           emptyText: (
             <Empty
@@ -75,14 +58,7 @@ export default function TodoList({
             />
           ),
         }}
-        renderItem={(item) => (
-          <TodoItem
-            key={item.id}
-            item={item}
-            setTodosList={setTodosList}
-            setEditingTodo={setEditingTodo}
-          />
-        )}
+        renderItem={(item) => <TodoItem key={item.id} item={item} />}
       />
     </section>
   )

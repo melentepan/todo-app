@@ -2,11 +2,15 @@ import { DeleteFilled, EditFilled } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Space } from 'antd'
 import type { Todo } from '../../types'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
+import {
+  removeTodo,
+  setEditingTodo,
+  toggleTodo,
+} from '../../store/todoList/todoList.slice'
 
 interface TodoItemProps {
   item: Todo
-  setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
-  setEditingTodo: React.Dispatch<React.SetStateAction<Todo | null>>
 }
 
 interface StyledTodoItemProps {
@@ -36,27 +40,19 @@ const TodoCheckBox = styled(Checkbox)`
   margin-left: 2px;
 `
 
-export default function TodoItem({
-  item,
-  setTodosList,
-  setEditingTodo,
-}: TodoItemProps) {
+export default function TodoItem({ item }: TodoItemProps) {
+  const dispatch = useDispatch()
+
   function checkboxHandler() {
-    setTodosList((prev) =>
-      prev.map((todoItem) =>
-        todoItem.id === item.id
-          ? { ...todoItem, completed: !todoItem.completed }
-          : todoItem
-      )
-    )
+    dispatch(toggleTodo(item.id))
   }
 
   function editTodoHandler() {
-    setEditingTodo(item)
+    dispatch(setEditingTodo(item))
   }
 
   function deleteTodoHandler() {
-    setTodosList((prev) => prev.filter((todoItem) => todoItem.id !== item.id))
+    dispatch(removeTodo(item.id))
   }
 
   return (
