@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '../types'
+import type { AppDispatch, RootState } from '../store/store'
 
 const API_URL = 'http://localhost:3001/todos'
 
@@ -10,7 +11,6 @@ export const fetchTodos = createAsyncThunk<
   { rejectValue: string }
 >('todos/fetchTodos', async ({ page, limit }, { rejectWithValue }) => {
   try {
-    console.log('start fetch')
     const response = await axios.get<TodoResponse>(
       `${API_URL}?page=${page}&limit=${limit}`
     )
@@ -26,10 +26,16 @@ export const fetchTodos = createAsyncThunk<
 export const addTodo = createAsyncThunk<
   Todo,
   AddTodoBody,
-  { rejectValue: string }
->('todos/addTodo', async (body, { rejectWithValue }) => {
+  { state: RootState; rejectValue: string; dispatch: AppDispatch }
+>('todos/addTodo', async (body, { getState, rejectWithValue, dispatch }) => {
   try {
     const response = await axios.post<Todo>(`${API_URL}`, body)
+
+    const state = getState()
+    const { limit, page } = state.todoList
+
+    dispatch(fetchTodos({ limit, page }))
+
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
@@ -58,10 +64,14 @@ export const changeTodo = createAsyncThunk<
 export const deleteTodo = createAsyncThunk<
   number,
   number,
-  { rejectValue: string }
->('todos/deleteTodo', async (id, { rejectWithValue }) => {
+  { state: RootState; rejectValue: string }
+>('todos/deleteTodo', async (id, { getState, rejectWithValue, dispatch }) => {
   try {
     await axios.delete(`${API_URL}/${id}`)
+    const state = getState()
+    const { limit, page } = state.todoList
+
+    dispatch(fetchTodos({ limit, page }))
     return id
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {

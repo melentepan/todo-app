@@ -1,4 +1,5 @@
 import { ConfigProvider, theme as antdTheme } from 'antd'
+import ru_RU from 'antd/locale/ru_RU'
 import type { ReactNode } from 'react'
 import { darkTheme, lightTheme } from '../../theme'
 import GlobalStyle from '../../GlobalStyles'
@@ -27,6 +28,7 @@ export default function AppWrapper({ children, isDark }: AppWrapperProps) {
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <ConfigProvider
+        locale={ru_RU}
         theme={{
           algorithm: isDark
             ? antdTheme.darkAlgorithm

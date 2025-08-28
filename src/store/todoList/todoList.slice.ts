@@ -17,7 +17,6 @@ interface TodoListState {
   page: number
   limit: number
   total: number
-  addingNew?: boolean
 }
 
 const initialState: TodoListState = {
@@ -26,7 +25,7 @@ const initialState: TodoListState = {
   loading: false,
   error: null,
   page: 1,
-  limit: 10,
+  limit: 5,
   total: 0,
 }
 
@@ -37,6 +36,12 @@ const todoListSlice = createSlice({
     setEditingTodo(state, action: PayloadAction<Todo | null>) {
       state.editingTodo = action.payload
     },
+    setPage(state, action: PayloadAction<number>) {
+      state.page = action.payload
+    },
+    setLimit(state, action: PayloadAction<number>) {
+      state.limit = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -46,7 +51,9 @@ const todoListSlice = createSlice({
       })
       .addCase(fetchTodos.fulfilled, (state, action) => {
         state.loading = false
-        state.todoList = action.payload.data
+        console.log(action.payload.data)
+        console.log(action.payload.data.reverse())
+        state.todoList = action.payload.data.reverse()
         state.total = action.payload.total
         saveTodosList(state.todoList)
       })
@@ -55,17 +62,14 @@ const todoListSlice = createSlice({
         state.error = action.payload ?? 'Ошибка загрузки'
       })
       .addCase(addTodo.pending, (state) => {
-        state.addingNew = true
         state.error = null
       })
       .addCase(addTodo.fulfilled, (state, action) => {
-        state.addingNew = false
         state.todoList.push(action.payload)
 
         saveTodosList(state.todoList)
       })
       .addCase(addTodo.rejected, (state, action) => {
-        state.addingNew = false
         state.error = action.payload ?? 'Ошибка загрузки'
       })
       .addCase(changeTodo.pending, (state, action) => {
@@ -85,7 +89,6 @@ const todoListSlice = createSlice({
           delete todo.loading
         }
         saveTodosList(state.todoList)
-        // state.editingTodo = null
       })
       .addCase(changeTodo.rejected, (state, action) => {
         const todo = state.todoList.find(
@@ -94,22 +97,20 @@ const todoListSlice = createSlice({
         if (todo) delete todo.loading
         state.error = action.payload ?? 'Ошибка загрузки'
       })
-      .addCase(deleteTodo.pending, (state, action) => {
-        const todo = state.todoList.find((todo) => todo.id === action.meta.arg)
-        if (todo) todo.loading = true
+      .addCase(deleteTodo.pending, (state) => {
+        state.loading = true
         state.error = null
       })
       .addCase(deleteTodo.fulfilled, (state, action) => {
-        const todo = state.todoList.find((todo) => todo.id === action.meta.arg)
-        if (todo) delete todo.loading
+        state.loading = false
+
         state.todoList = state.todoList.filter(
           (todoItem) => todoItem.id !== action.payload
         )
         saveTodosList(state.todoList)
       })
       .addCase(deleteTodo.rejected, (state, action) => {
-        const todo = state.todoList.find((todo) => todo.id === action.meta.arg)
-        if (todo) delete todo.loading
+        state.loading = false
         state.error = action.payload ?? 'Ошибка загрузки'
       })
       .addCase(toggleTodo.pending, (state, action) => {
@@ -137,4 +138,4 @@ const todoListSlice = createSlice({
 })
 
 export default todoListSlice.reducer
-export const { setEditingTodo } = todoListSlice.actions
+export const { setEditingTodo, setPage, setLimit } = todoListSlice.actions

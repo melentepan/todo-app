@@ -19,6 +19,7 @@ import { useEffect } from 'react'
 import { fetchTodos } from '../../api/todos'
 import type { AppDispatch } from '../../store/store'
 import styled from 'styled-components'
+import { setLimit, setPage } from '../../store/todoList/todoList.slice'
 
 const SpinTip = styled.span`
   opacity: 0.75;
@@ -50,6 +51,11 @@ export default function TodoList() {
 
   function onErrorHandler() {
     dispatch(fetchTodos({ page: page, limit: limit }))
+  }
+
+  const onPaginationChange = (page: number, pageSize: number) => {
+    dispatch(setPage(page))
+    dispatch(setLimit(pageSize))
   }
 
   useEffect(() => {
@@ -134,9 +140,12 @@ export default function TodoList() {
       <Pagination
         style={{ margin: '0 auto' }}
         showSizeChanger
-        // onShowSizeChange={onShowSizeChange}
         defaultCurrent={1}
+        defaultPageSize={5}
+        pageSizeOptions={[5, 10, 20]}
         total={total}
+        showTotal={(total, range) => `${range[0]}-${range[1]} из ${total}`}
+        onChange={onPaginationChange}
       />
     </>
   )

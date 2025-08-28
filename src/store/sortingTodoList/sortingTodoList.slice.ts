@@ -9,7 +9,7 @@ interface SortingTodoListState {
 
 const initialState: SortingTodoListState = {
   status: statusCycle[0],
-  order: 'asc',
+  order: 'desc',
 }
 
 const sortingTodoList = createSlice({
