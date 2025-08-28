@@ -7,7 +7,6 @@ import AppWrapper from './components/AppWrapper/AppWrapper'
 import { useDispatch } from 'react-redux'
 import { switchTheme } from './store/theme/theme.slice'
 import useTheme from './hooks/useTheme'
-
 function App() {
   const dispatch = useDispatch()
   const { isDark } = useTheme()
@@ -18,13 +17,13 @@ function App() {
 
   return (
     <AppWrapper isDark={isDark}>
-      <Flex vertical>
+      <Flex vertical style={{ height: '100%' }}>
         <Button
           type='primary'
           shape='circle'
           size='large'
           onClick={changeThemeHandler}
-          style={{ alignSelf: 'center', marginTop: '5px' }}
+          style={{ alignSelf: 'center', marginTop: '5px', flexShrink: '0' }}
         >
           {isDark ? <SunFilled /> : <MoonFilled />}
         </Button>

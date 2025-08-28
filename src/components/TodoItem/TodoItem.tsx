@@ -1,13 +1,12 @@
 import { DeleteFilled, EditFilled } from '@ant-design/icons'
-import { Button, Checkbox, Flex, Space } from 'antd'
+import { Button, Checkbox, Flex, Space, Spin } from 'antd'
 import type { Todo } from '../../types'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import {
-  removeTodo,
-  setEditingTodo,
-  toggleTodo,
-} from '../../store/todoList/todoList.slice'
+
+import type { AppDispatch } from '../../store/store'
+import { deleteTodo, toggleTodo } from '../../api/todos'
+import { setEditingTodo } from '../../store/todoList/todoList.slice'
 
 interface TodoItemProps {
   item: Todo
@@ -15,13 +14,15 @@ interface TodoItemProps {
 
 interface StyledTodoItemProps {
   $checked?: boolean
+  $loading?: boolean
 }
 
 const TodoItemWrapper = styled(Flex)<StyledTodoItemProps>`
+  position: relative;
   padding: 10px;
   border: 2px solid
-    ${({ $checked, theme }) =>
-      $checked ? theme.primary + '80' : theme.primary};
+    ${({ $checked, $loading, theme }) =>
+      $checked || $loading ? theme.primary + '80' : theme.primary};
   border-radius: 10px;
   margin-bottom: 8px;
   transition: border-color 0.3s ease;
@@ -31,7 +32,7 @@ const TodoDescription = styled.p<StyledTodoItemProps>`
   font-size: 18px;
   word-break: break-word;
   text-decoration-line: ${({ $checked }) => ($checked ? 'line-through' : '')};
-  opacity: ${({ $checked }) => ($checked ? '0.5' : '1')};
+  opacity: ${({ $checked, $loading }) => ($checked || $loading ? '0.5' : '1')};
   transition: opacity 0.3s ease;
 `
 
@@ -40,8 +41,16 @@ const TodoCheckBox = styled(Checkbox)`
   margin-left: 2px;
 `
 
+const TodoSpin = styled(Spin)<StyledTodoItemProps>`
+  display: ${({ $loading }) => ($loading ? 'flex' : 'none')};
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  align-items: center;
+`
+
 export default function TodoItem({ item }: TodoItemProps) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   function checkboxHandler() {
     dispatch(toggleTodo(item.id))
@@ -52,11 +61,12 @@ export default function TodoItem({ item }: TodoItemProps) {
   }
 
   function deleteTodoHandler() {
-    dispatch(removeTodo(item.id))
+    dispatch(deleteTodo(item.id))
   }
 
   return (
     <TodoItemWrapper
+      $loading={item.loading}
       $checked={item.completed}
       align='center'
       justify='space-between'
@@ -64,7 +74,9 @@ export default function TodoItem({ item }: TodoItemProps) {
     >
       <Space size={10}>
         <TodoCheckBox onChange={checkboxHandler} checked={item.completed} />
-        <TodoDescription $checked={item.completed}>{item.text}</TodoDescription>
+        <TodoDescription $checked={item.completed} $loading={item.loading}>
+          {item.text}
+        </TodoDescription>
       </Space>
       <Space>
         <Button
@@ -72,7 +84,7 @@ export default function TodoItem({ item }: TodoItemProps) {
           shape='circle'
           size='large'
           onClick={editTodoHandler}
-          disabled={item.completed}
+          disabled={item.completed || item.loading}
         >
           <EditFilled />
         </Button>
@@ -81,10 +93,12 @@ export default function TodoItem({ item }: TodoItemProps) {
           shape='circle'
           size='large'
           onClick={deleteTodoHandler}
+          disabled={item.loading}
         >
           <DeleteFilled />
         </Button>
       </Space>
+      <TodoSpin $loading={item.loading} />
     </TodoItemWrapper>
   )
 }

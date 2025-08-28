@@ -5,14 +5,16 @@ import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import { useInput } from '../../hooks/useInput'
 import useTodoList from '../../hooks/useTodoList'
 import { useDispatch } from 'react-redux'
-import { setEditingTodo, updateTodo } from '../../store/todoList/todoList.slice'
+import { setEditingTodo } from '../../store/todoList/todoList.slice'
+import type { AppDispatch } from '../../store/store'
+import { changeTodo } from '../../api/todos'
 
 export default function EditTodo() {
   const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
     useInput('')
 
   const { editingTodo } = useTodoList()
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
     if (editingTodo) {
@@ -21,8 +23,8 @@ export default function EditTodo() {
   }, [editingTodo, setInputValue])
 
   const handleEdit = () => {
-    if (validate()) {
-      dispatch(updateTodo(inputValue))
+    if (validate() && editingTodo) {
+      dispatch(changeTodo({ id: editingTodo.id, body: { text: inputValue } }))
     }
   }
 
