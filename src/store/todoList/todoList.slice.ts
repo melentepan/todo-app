@@ -1,12 +1,12 @@
-import { loadTodosList, saveTodosList } from '../../utils/localStorage'
-import type { Todo } from '../../types'
+import { loadTodosList, saveTodosList } from '@/utils/localStorage'
+import type { Todo } from '@/types'
 import {
   addTodo,
   changeTodo,
   deleteTodo,
   fetchTodos,
   toggleTodo,
-} from '../../api/todos'
+} from '@/api/todos'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit/react'
 
 interface TodoListState {

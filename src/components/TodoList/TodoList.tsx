@@ -1,25 +1,25 @@
-import CustomDivider from '../CustomDivider/CustomDivider'
+import CustomDivider from '@/components/CustomDivider/CustomDivider'
 import { Button, Empty, Flex, List, Pagination, Spin } from 'antd'
-import TodoItem from '../TodoItem/TodoItem'
+import TodoItem from '@/components/TodoItem/TodoItem'
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
-import { statusText } from '../../constants'
-import todoSorting from '../../utils/todoSorting'
-import useTodoList from '../../hooks/useTodoList'
+import { statusText } from '@/constants'
+import todoSorting from '@/utils/todoSorting'
+import useTodoList from '@/hooks/useTodoList'
 import { useDispatch } from 'react-redux'
 import {
   switchOrder,
   switchStatus,
-} from '../../store/sortingTodoList/sortingTodoList.slice'
-import useSortingTodoList from '../../hooks/useSortingTodoList'
+} from '@/store/sortingTodoList/sortingTodoList.slice'
+import useSortingTodoList from '@/hooks/useSortingTodoList'
 import { useEffect } from 'react'
-import { fetchTodos } from '../../api/todos'
-import type { AppDispatch } from '../../store/store'
+import { fetchTodos } from '@/api/todos'
+import type { AppDispatch } from '@/store/store'
 import styled from 'styled-components'
-import { setLimit, setPage } from '../../store/todoList/todoList.slice'
+import { setLimit, setPage } from '@/store/todoList/todoList.slice'
 
 const SpinTip = styled.span`
   opacity: 0.75;

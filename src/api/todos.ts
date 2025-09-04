@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '../types'
-import type { AppDispatch, RootState } from '../store/store'
+import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '@/types'
+import type { AppDispatch, RootState } from '@/store/store'
 
 const API_URL = 'http://localhost:3001/todos'
 

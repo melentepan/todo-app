@@ -1,4 +1,4 @@
-import type { Todo } from '../types'
+import type { Todo } from '@/types'
 
 export function saveIsDarkTheme(theme: boolean) {
   localStorage.setItem('theme', theme ? 'dark' : 'light')

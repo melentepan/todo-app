@@ -1,12 +1,11 @@
 import { DeleteFilled, EditFilled } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Space, Spin } from 'antd'
-import type { Todo } from '../../types'
+import type { Todo } from '@/types'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-
-import type { AppDispatch } from '../../store/store'
-import { deleteTodo, toggleTodo } from '../../api/todos'
-import { setEditingTodo } from '../../store/todoList/todoList.slice'
+import type { AppDispatch } from '@/store/store'
+import { deleteTodo, toggleTodo } from '@/api/todos'
+import { setEditingTodo } from '@/store/todoList/todoList.slice'
 
 interface TodoItemProps {
   item: Todo

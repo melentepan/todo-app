@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { StatusType } from '../../types'
-import { statusCycle } from '../../constants'
+import type { StatusType } from '@/types'
+import { statusCycle } from '@/constants'
 
 interface SortingTodoListState {
   status: StatusType

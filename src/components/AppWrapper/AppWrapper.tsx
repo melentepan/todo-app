@@ -1,8 +1,8 @@
 import { ConfigProvider, theme as antdTheme } from 'antd'
 import ru_RU from 'antd/locale/ru_RU'
 import type { ReactNode } from 'react'
-import { darkTheme, lightTheme } from '../../theme'
-import GlobalStyle from '../../GlobalStyles'
+import { darkTheme, lightTheme } from '@/theme'
+import GlobalStyle from '@/GlobalStyles'
 import styled, { ThemeProvider } from 'styled-components'
 
 const Wrapper = styled.div`

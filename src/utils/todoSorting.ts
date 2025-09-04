@@ -1,4 +1,4 @@
-import type { StatusType, Todo } from '../types'
+import type { StatusType, Todo } from '@/types'
 
 export default function todoSorting(
   todosList: Todo[],

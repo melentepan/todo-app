@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loadIsDarkTheme, saveIsDarkTheme } from '../../utils/localStorage'
+import { loadIsDarkTheme, saveIsDarkTheme } from '@/utils/localStorage'
 
 interface ThemeState {
   isDark: boolean
