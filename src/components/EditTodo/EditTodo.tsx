@@ -1,23 +1,20 @@
 import { Modal } from 'antd'
 import { useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import type { Todo } from '../../types'
 import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import { useInput } from '../../hooks/useInput'
+import useTodoList from '../../hooks/useTodoList'
+import { useDispatch } from 'react-redux'
+import { setEditingTodo } from '../../store/todoList/todoList.slice'
+import type { AppDispatch } from '../../store/store'
+import { changeTodo } from '../../api/todos'
 
-interface EditTodoProps {
-  editingTodo: Todo | null
-  setEditingTodo: React.Dispatch<React.SetStateAction<Todo | null>>
-  setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
-}
-
-export default function EditTodo({
-  editingTodo,
-  setEditingTodo,
-  setTodosList,
-}: EditTodoProps) {
+export default function EditTodo() {
   const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
     useInput('')
+
+  const { editingTodo } = useTodoList()
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
     if (editingTodo) {
@@ -26,20 +23,13 @@ export default function EditTodo({
   }, [editingTodo, setInputValue])
 
   const handleEdit = () => {
-    if (validate()) {
-      setTodosList((prev) =>
-        prev.map((todoItem) =>
-          todoItem.id === editingTodo?.id
-            ? { ...todoItem, text: inputValue }
-            : todoItem
-        )
-      )
-      setEditingTodo(null)
+    if (validate() && editingTodo) {
+      dispatch(changeTodo({ id: editingTodo.id, body: { text: inputValue } }))
     }
   }
 
   const handleCancel = () => {
-    setEditingTodo(null)
+    dispatch(setEditingTodo(null))
   }
 
   if (editingTodo === null) return null

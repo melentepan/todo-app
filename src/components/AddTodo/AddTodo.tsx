@@ -1,29 +1,24 @@
 import { Button, Flex } from 'antd'
 import CustomDivider from '../CustomDivider/CustomDivider'
-import type { Todo } from '../../types'
+import type { AddTodoBody } from '../../types'
 import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import { useInput } from '../../hooks/useInput'
+import { useDispatch } from 'react-redux'
+import { addTodo } from '../../api/todos'
+import type { AppDispatch } from '../../store/store'
 
-interface AddTodoProps {
-  setTodosList: React.Dispatch<React.SetStateAction<Todo[]>>
-}
-
-export default function AddTodo({ setTodosList }: AddTodoProps) {
+export default function AddTodo() {
+  const dispatch = useDispatch<AppDispatch>()
   const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
     useInput('')
 
   function addTaskHandler() {
     if (validate()) {
-      const newTodo: Todo = {
-        id: Date.now(),
+      const newTodo: AddTodoBody = {
         text: inputValue,
-        completed: false,
-        createdAt: new Date(),
       }
 
-      setTodosList((prev) => {
-        return [...prev, newTodo]
-      })
+      dispatch(addTodo(newTodo))
 
       setInputValue('')
     }
