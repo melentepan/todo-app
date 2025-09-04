@@ -3,8 +3,6 @@ import axios from 'axios'
 import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '@/types'
 import type { AppDispatch, RootState } from '@/store/store'
 
-const API_URL = 'http://localhost:3001/todos'
-
 export const fetchTodos = createAsyncThunk<
   TodoResponse,
   { page: number; limit: number },
@@ -12,7 +10,7 @@ export const fetchTodos = createAsyncThunk<
 >('todos/fetchTodos', async ({ page, limit }, { rejectWithValue }) => {
   try {
     const response = await axios.get<TodoResponse>(
-      `${API_URL}?page=${page}&limit=${limit}`
+      `${import.meta.env.VITE_API_URL}?page=${page}&limit=${limit}`
     )
     return response.data
   } catch (err: unknown) {
@@ -29,7 +27,10 @@ export const addTodo = createAsyncThunk<
   { state: RootState; rejectValue: string; dispatch: AppDispatch }
 >('todos/addTodo', async (body, { getState, rejectWithValue, dispatch }) => {
   try {
-    const response = await axios.post<Todo>(`${API_URL}`, body)
+    const response = await axios.post<Todo>(
+      `${import.meta.env.VITE_API_URL}`,
+      body
+    )
 
     const state = getState()
     const { limit, page } = state.todoList
@@ -51,7 +52,10 @@ export const changeTodo = createAsyncThunk<
   { rejectValue: string }
 >('todos/changeTodo', async ({ id, body }, { rejectWithValue }) => {
   try {
-    const response = await axios.put<Todo>(`${API_URL}/${id}`, body)
+    const response = await axios.put<Todo>(
+      `${import.meta.env.VITE_API_URL}/${id}`,
+      body
+    )
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
@@ -67,7 +71,7 @@ export const deleteTodo = createAsyncThunk<
   { state: RootState; rejectValue: string }
 >('todos/deleteTodo', async (id, { getState, rejectWithValue, dispatch }) => {
   try {
-    await axios.delete(`${API_URL}/${id}`)
+    await axios.delete(`${import.meta.env.VITE_API_URL}/${id}`)
     const state = getState()
     const { limit, page } = state.todoList
 
@@ -87,7 +91,9 @@ export const toggleTodo = createAsyncThunk<
   { rejectValue: string }
 >('todos/toggleTodo', async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.patch<Todo>(`${API_URL}/${id}/toggle`)
+    const response = await axios.patch<Todo>(
+      `${import.meta.env.VITE_API_URL}/${id}/toggle`
+    )
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {

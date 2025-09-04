@@ -51,8 +51,6 @@ const todoListSlice = createSlice({
       })
       .addCase(fetchTodos.fulfilled, (state, action) => {
         state.loading = false
-        console.log(action.payload.data)
-        console.log(action.payload.data.reverse())
         state.todoList = action.payload.data.reverse()
         state.total = action.payload.total
         saveTodosList(state.todoList)
