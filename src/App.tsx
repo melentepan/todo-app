@@ -7,6 +7,18 @@ import AppWrapper from './components/AppWrapper/AppWrapper'
 import { useDispatch } from 'react-redux'
 import { switchTheme } from './store/theme/theme.slice'
 import useTheme from './hooks/useTheme'
+import styled from 'styled-components'
+
+const StyledFlex = styled(Flex)`
+  height: 100%;
+`
+
+const ChangeThemeButton = styled(Button)`
+  align-self: center;
+  margin-top: 5px;
+  flex-shrink: 0;
+`
+
 function App() {
   const dispatch = useDispatch()
   const { isDark } = useTheme()
@@ -17,19 +29,18 @@ function App() {
 
   return (
     <AppWrapper isDark={isDark}>
-      <Flex vertical style={{ height: '100%' }}>
-        <Button
+      <StyledFlex vertical>
+        <ChangeThemeButton
           type='primary'
           shape='circle'
           size='large'
           onClick={changeThemeHandler}
-          style={{ alignSelf: 'center', marginTop: '5px', flexShrink: '0' }}
         >
           {isDark ? <SunFilled /> : <MoonFilled />}
-        </Button>
+        </ChangeThemeButton>
         <AddTodo />
         <TodoList />
-      </Flex>
+      </StyledFlex>
       <EditTodo />
     </AppWrapper>
   )

@@ -1,5 +1,13 @@
 import CustomDivider from '@/components/CustomDivider/CustomDivider'
-import { Button, Empty, Flex, List, Pagination, Spin } from 'antd'
+import {
+  Button,
+  Empty,
+  Flex,
+  List,
+  Pagination,
+  Spin,
+  type ListProps,
+} from 'antd'
 import TodoItem from '@/components/TodoItem/TodoItem'
 import {
   ArrowDownOutlined,
@@ -20,6 +28,7 @@ import { fetchTodos } from '@/api/todos'
 import type { AppDispatch } from '@/store/store'
 import styled from 'styled-components'
 import { setLimit, setPage } from '@/store/todoList/todoList.slice'
+import type { Todo } from '@/types'
 
 const SpinTip = styled.span`
   opacity: 0.75;
@@ -34,6 +43,35 @@ const ErrorTip = styled.span`
 const ErrorIcon = styled(InfoCircleOutlined)`
   color: ${({ theme }) => theme.error};
   font-size: 24px;
+`
+
+const StyledFlex = styled(Flex)`
+  height: 100%;
+  margin-top: 20px;
+`
+
+const StatusButton = styled(Button)`
+  width: 100%;
+`
+
+interface StyledListProps<T> extends ListProps<T> {
+  isEmpty: boolean
+}
+
+const StyledList = styled(List)<StyledListProps<Todo>>`
+  margin-top: 20px;
+  height: 100%;
+  ${(props) =>
+    props.isEmpty &&
+    `
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `}
+`
+
+const StyledPagination = styled(Pagination)`
+  margin: 0 auto;
 `
 
 export default function TodoList() {
@@ -66,40 +104,28 @@ export default function TodoList() {
       <CustomDivider>Список задач</CustomDivider>
 
       {loading ? (
-        <Flex
-          vertical
-          justify='center'
-          align='center'
-          style={{ marginTop: '20px', height: '100%' }}
-        >
+        <StyledFlex vertical justify='center' align='center'>
           <Spin size='large' />
           <SpinTip>Загрузка</SpinTip>
-        </Flex>
+        </StyledFlex>
       ) : error ? (
-        <Flex
-          gap={10}
-          vertical
-          justify='center'
-          align='center'
-          style={{ marginTop: '20px', height: '100%' }}
-        >
+        <StyledFlex gap={10} vertical justify='center' align='center'>
           <Flex gap={10} align='center'>
             <ErrorIcon />
             <ErrorTip>{error}</ErrorTip>
           </Flex>
           <Button onClick={onErrorHandler}>Повторить</Button>
-        </Flex>
+        </StyledFlex>
       ) : (
         <>
           <Flex gap={10}>
-            <Button
+            <StatusButton
               size='large'
               type='primary'
-              style={{ width: '100%' }}
               onClick={statusButtonHandler}
             >
               {statusText[status]}
-            </Button>
+            </StatusButton>
             <Button
               size='large'
               type='primary'
@@ -111,18 +137,8 @@ export default function TodoList() {
               onClick={orderButtonHandler}
             />
           </Flex>
-          <List
-            style={{
-              ...(todoList.length === 0
-                ? {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }
-                : {}),
-              marginTop: '20px',
-              height: '100%',
-            }}
+          <StyledList
+            isEmpty={todoList.length === 0}
             itemLayout='horizontal'
             dataSource={todoSorting(todoList, status, order)}
             locale={{
@@ -137,8 +153,7 @@ export default function TodoList() {
           />
         </>
       )}
-      <Pagination
-        style={{ margin: '0 auto' }}
+      <StyledPagination
         showSizeChanger
         defaultCurrent={1}
         defaultPageSize={5}
