@@ -1,28 +1,14 @@
-import { Flex } from 'antd'
-import AddTodo from './components/AddTodo/AddTodo'
-import TodoList from './components/TodoList/TodoList'
-import EditTodo from './components/EditTodo/EditTodo'
-import AppWrapper from './components/AppWrapper/AppWrapper'
-import useTheme from './hooks/useTheme'
-import styled from 'styled-components'
-import ChangeThemeButton from './components/ChangeThemeButton/ChangeThemeButton'
-
-const StyledFlex = styled(Flex)`
-  height: 100%;
-`
+import { Route, Routes } from 'react-router-dom'
+import Homepage from './pages/Homepage'
+import Layout from './components/Layout/Layout'
 
 function App() {
-  const { isDark } = useTheme()
-
   return (
-    <AppWrapper isDark={isDark}>
-      <StyledFlex vertical>
-        <ChangeThemeButton />
-        <AddTodo />
-        <TodoList />
-      </StyledFlex>
-      <EditTodo />
-    </AppWrapper>
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        <Route index element={<Homepage />} />
+      </Route>
+    </Routes>
   )
 }
 
