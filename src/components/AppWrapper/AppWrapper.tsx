@@ -23,10 +23,10 @@ interface AppWrapperProps {
 }
 
 export default function AppWrapper({ children, isDark }: AppWrapperProps) {
-  const styledTheme = isDark ? darkTheme : lightTheme
+  const theme = isDark ? darkTheme : lightTheme
 
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+    <ThemeProvider theme={theme}>
       <ConfigProvider
         locale={ru_RU}
         theme={{
@@ -34,9 +34,9 @@ export default function AppWrapper({ children, isDark }: AppWrapperProps) {
             ? antdTheme.darkAlgorithm
             : antdTheme.defaultAlgorithm,
           token: {
-            colorPrimary: styledTheme.primary,
-            colorBgBase: styledTheme.background,
-            colorText: styledTheme.text,
+            colorPrimary: theme.primary,
+            colorBgBase: theme.background,
+            colorText: theme.text,
           },
         }}
       >
