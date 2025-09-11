@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { privateApi } from './privateApi'
 import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '@/types'
 import type { AppDispatch, RootState } from '@/store/store'
+import axios from 'axios'
 
 export const fetchTodos = createAsyncThunk<
   TodoResponse,
@@ -9,13 +10,13 @@ export const fetchTodos = createAsyncThunk<
   { rejectValue: string }
 >('todos/fetchTodos', async ({ page, limit }, { rejectWithValue }) => {
   try {
-    const response = await axios.get<TodoResponse>(
-      `${import.meta.env.VITE_API_URL}?page=${page}&limit=${limit}`
-    )
+    const response = await privateApi.get<TodoResponse>('/todos', {
+      params: { page, limit },
+    })
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -27,20 +28,16 @@ export const addTodo = createAsyncThunk<
   { state: RootState; rejectValue: string; dispatch: AppDispatch }
 >('todos/addTodo', async (body, { getState, rejectWithValue, dispatch }) => {
   try {
-    const response = await axios.post<Todo>(
-      `${import.meta.env.VITE_API_URL}`,
-      body
-    )
+    const response = await privateApi.post<Todo>('/todos', body)
 
     const state = getState()
     const { limit, page } = state.todoList
-
     dispatch(fetchTodos({ limit, page }))
 
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -52,14 +49,11 @@ export const changeTodo = createAsyncThunk<
   { rejectValue: string }
 >('todos/changeTodo', async ({ id, body }, { rejectWithValue }) => {
   try {
-    const response = await axios.put<Todo>(
-      `${import.meta.env.VITE_API_URL}/${id}`,
-      body
-    )
+    const response = await privateApi.put<Todo>(`/todos/${id}`, body)
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -68,18 +62,19 @@ export const changeTodo = createAsyncThunk<
 export const deleteTodo = createAsyncThunk<
   number,
   number,
-  { state: RootState; rejectValue: string }
+  { state: RootState; rejectValue: string; dispatch: AppDispatch }
 >('todos/deleteTodo', async (id, { getState, rejectWithValue, dispatch }) => {
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/${id}`)
+    await privateApi.delete(`/todos/${id}`)
+
     const state = getState()
     const { limit, page } = state.todoList
-
     dispatch(fetchTodos({ limit, page }))
+
     return id
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -91,13 +86,11 @@ export const toggleTodo = createAsyncThunk<
   { rejectValue: string }
 >('todos/toggleTodo', async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.patch<Todo>(
-      `${import.meta.env.VITE_API_URL}/${id}/toggle`
-    )
+    const response = await privateApi.patch<Todo>(`/todos/${id}/toggle`)
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
