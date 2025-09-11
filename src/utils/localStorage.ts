@@ -24,3 +24,21 @@ export function loadTodosList(): Todo[] {
     return []
   }
 }
+
+export function saveTokens(accessToken: string, refreshToken: string) {
+  localStorage.setItem('accessToken', accessToken)
+  localStorage.setItem('refreshToken', refreshToken)
+}
+
+export function loadAccessToken(): string | null {
+  return localStorage.getItem('accessToken')
+}
+
+export function loadRefreshToken(): string | null {
+  return localStorage.getItem('refreshToken')
+}
+
+export function removeTokens() {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+}
