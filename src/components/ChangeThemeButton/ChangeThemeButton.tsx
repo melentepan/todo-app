@@ -1,15 +1,8 @@
 import useTheme from '@/hooks/useTheme'
 import { switchTheme } from '@/store/theme/theme.slice'
 import { MoonFilled, SunFilled } from '@ant-design/icons'
-import { Button } from 'antd'
 import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
-
-const StyledChangeThemeButton = styled(Button)`
-  align-self: center;
-  margin-top: 5px;
-  flex-shrink: 0;
-`
+import { StyledCircleButton } from '../StyledCircleButton/StyledCircleButton'
 
 export default function ChangeThemeButton() {
   const dispatch = useDispatch()
@@ -19,13 +12,13 @@ export default function ChangeThemeButton() {
     dispatch(switchTheme())
   }
   return (
-    <StyledChangeThemeButton
+    <StyledCircleButton
       type='primary'
       shape='circle'
       size='large'
       onClick={changeThemeHandler}
     >
       {isDark ? <SunFilled /> : <MoonFilled />}
-    </StyledChangeThemeButton>
+    </StyledCircleButton>
   )
 }

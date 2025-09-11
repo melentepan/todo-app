@@ -4,9 +4,10 @@ import { Outlet } from 'react-router-dom'
 import ChangeThemeButton from '../ChangeThemeButton/ChangeThemeButton'
 import { Flex } from 'antd'
 import styled from 'styled-components'
+import ProfileMenu from '../ProfileMenu/ProfileMenu'
 
 const StyledFlex = styled(Flex)`
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `
 
 export default function Layout() {
@@ -14,8 +15,9 @@ export default function Layout() {
 
   return (
     <AppWrapper isDark={isDark}>
-      <StyledFlex vertical>
+      <StyledFlex align='center' justify='flex-end' gap={5}>
         <ChangeThemeButton />
+        <ProfileMenu />
       </StyledFlex>
 
       <Outlet />
