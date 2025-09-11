@@ -6,7 +6,7 @@ import {
   registerUser,
 } from '@/api/auth'
 import type { UserProfile } from '@/types'
-import { saveTokens } from '@/utils/localStorage'
+import { removeTokens, saveTokens } from '@/utils/localStorage'
 import { createSlice } from '@reduxjs/toolkit'
 
 interface AuthState {
@@ -26,7 +26,15 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser(state) {
+      state.user = null
+      state.token = null
+      state.status = 'idle'
+      state.error = null
+      removeTokens()
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -90,3 +98,4 @@ const authSlice = createSlice({
 })
 
 export default authSlice.reducer
+export const { logoutUser } = authSlice.actions
