@@ -2,26 +2,33 @@ import {
   changePassword,
   fetchUserProfile,
   loginUser,
-  refreshToken,
   registerUser,
 } from '@/api/auth'
 import type { UserProfile } from '@/types'
 import { removeRefreshToken, saveRefreshToken } from '@/utils/localStorage'
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
+import { message } from 'antd'
 
 interface AuthState {
   user: UserProfile | null
   token: string | null
   status: 'idle' | 'loading' | 'failed'
-  error: string | null
 }
 
 const initialState: AuthState = {
   user: null,
   token: null,
   status: 'idle',
-  error: null,
+}
+
+const handleRejected = (
+  state: AuthState,
+  action: PayloadAction<string | undefined>
+) => {
+  state.status = 'failed'
+
+  message.error(action.payload)
 }
 
 const authSlice = createSlice({
@@ -32,13 +39,14 @@ const authSlice = createSlice({
       state.user = null
       state.token = null
       state.status = 'idle'
-      state.error = null
       removeRefreshToken()
       Cookies.remove('accessToken')
+      message.success('Выход выполнен успешно')
     },
   },
   extraReducers: (builder) => {
     builder
+      // Register
       .addCase(registerUser.pending, (state) => {
         state.status = 'loading'
       })
@@ -47,11 +55,11 @@ const authSlice = createSlice({
         state.token = action.payload.accessToken
         saveRefreshToken(action.payload.refreshToken)
         Cookies.set('accessToken', action.payload.accessToken)
+        message.success('Регистрация выполнена успешно')
       })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.payload || 'Неизвестная ошибка'
-      })
+      .addCase(registerUser.rejected, handleRejected)
+
+      // Login
       .addCase(loginUser.pending, (state) => {
         state.status = 'loading'
       })
@@ -60,24 +68,11 @@ const authSlice = createSlice({
         state.token = action.payload.accessToken
         saveRefreshToken(action.payload.refreshToken)
         Cookies.set('accessToken', action.payload.accessToken)
+        message.success('Вход выполнен успешно')
       })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.payload || 'Неизвестная ошибка'
-      })
-      .addCase(refreshToken.pending, (state) => {
-        state.status = 'loading'
-      })
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        state.status = 'idle'
-        state.token = action.payload.accessToken
-        saveRefreshToken(action.payload.refreshToken)
-        Cookies.set('accessToken', action.payload.accessToken)
-      })
-      .addCase(refreshToken.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.payload || 'Неизвестная ошибка'
-      })
+      .addCase(loginUser.rejected, handleRejected)
+
+      // Fetch profile
       .addCase(fetchUserProfile.pending, (state) => {
         state.status = 'loading'
       })
@@ -85,20 +80,16 @@ const authSlice = createSlice({
         state.status = 'idle'
         state.user = action.payload
       })
-      .addCase(fetchUserProfile.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.payload || 'Неизвестная ошибка'
-      })
+      .addCase(fetchUserProfile.rejected, handleRejected)
+
+      // Change password
       .addCase(changePassword.pending, (state) => {
         state.status = 'loading'
       })
       .addCase(changePassword.fulfilled, (state) => {
         state.status = 'idle'
       })
-      .addCase(changePassword.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.payload || 'Неизвестная ошибка'
-      })
+      .addCase(changePassword.rejected, handleRejected)
   },
 })
 

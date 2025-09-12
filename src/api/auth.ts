@@ -3,7 +3,6 @@ import type {
   ChangePasswordBody,
   ChangePasswordResponse,
   LoginBody,
-  RefreshTokenBody,
   RegisterBody,
   UserProfile,
 } from '@/types'
@@ -22,7 +21,11 @@ export const registerUser = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      const status = err.response?.status
+
+      if (status === 400) {
+        return rejectWithValue('Аккаунт с таким e-mail уже существует')
+      }
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -38,23 +41,11 @@ export const loginUser = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
-    }
-    return rejectWithValue('Неизвестная ошибка')
-  }
-})
+      const status = err.response?.status
 
-export const refreshToken = createAsyncThunk<
-  AuthTokens,
-  RefreshTokenBody,
-  { rejectValue: string }
->('auth/refreshToken', async (body, { rejectWithValue }) => {
-  try {
-    const response = await authApi.post<AuthTokens>('/auth/refresh', body)
-    return response.data
-  } catch (err: unknown) {
-    if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      if (status === 401) {
+        return rejectWithValue('Неверный логин или пароль')
+      }
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -70,7 +61,7 @@ export const fetchUserProfile = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Неизвестная ошибка')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
@@ -89,7 +80,7 @@ export const changePassword = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Неизвестная ошибка')
     }
     return rejectWithValue('Неизвестная ошибка')
   }
