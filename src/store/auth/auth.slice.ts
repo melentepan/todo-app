@@ -6,8 +6,9 @@ import {
   registerUser,
 } from '@/api/auth'
 import type { UserProfile } from '@/types'
-import { removeTokens, saveTokens } from '@/utils/localStorage'
+import { removeRefreshToken, saveRefreshToken } from '@/utils/localStorage'
 import { createSlice } from '@reduxjs/toolkit'
+import Cookies from 'js-cookie'
 
 interface AuthState {
   user: UserProfile | null
@@ -32,7 +33,8 @@ const authSlice = createSlice({
       state.token = null
       state.status = 'idle'
       state.error = null
-      removeTokens()
+      removeRefreshToken()
+      Cookies.remove('accessToken')
     },
   },
   extraReducers: (builder) => {
@@ -43,7 +45,8 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'idle'
         state.token = action.payload.accessToken
-        saveTokens(action.payload.accessToken, action.payload.refreshToken)
+        saveRefreshToken(action.payload.refreshToken)
+        Cookies.set('accessToken', action.payload.accessToken)
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = 'failed'
@@ -55,7 +58,8 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'idle'
         state.token = action.payload.accessToken
-        saveTokens(action.payload.accessToken, action.payload.refreshToken)
+        saveRefreshToken(action.payload.refreshToken)
+        Cookies.set('accessToken', action.payload.accessToken)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed'
@@ -67,7 +71,8 @@ const authSlice = createSlice({
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.status = 'idle'
         state.token = action.payload.accessToken
-        saveTokens(action.payload.accessToken, action.payload.refreshToken)
+        saveRefreshToken(action.payload.refreshToken)
+        Cookies.set('accessToken', action.payload.accessToken)
       })
       .addCase(refreshToken.rejected, (state, action) => {
         state.status = 'failed'

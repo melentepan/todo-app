@@ -1,10 +1,11 @@
 import type { AuthTokens } from '@/types'
 import {
   loadRefreshToken,
-  removeTokens,
-  saveTokens,
+  removeRefreshToken,
+  saveRefreshToken,
 } from '@/utils/localStorage'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 export const privateApi = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -14,10 +15,7 @@ export const privateApi = axios.create({
 })
 
 privateApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  config.headers.Authorization = `Bearer ${Cookies.get('accessToken')}`
   return config
 })
 
@@ -31,7 +29,8 @@ privateApi.interceptors.response.use(
       try {
         const refreshToken = loadRefreshToken()
         if (!refreshToken) {
-          removeTokens()
+          removeRefreshToken()
+          Cookies.remove('accessToken')
           return Promise.reject(error)
         }
 
@@ -42,12 +41,15 @@ privateApi.interceptors.response.use(
           }
         )
 
-        saveTokens(data.accessToken, data.refreshToken)
+        saveRefreshToken(data.refreshToken)
+        Cookies.set('accessToken', data.accessToken)
+
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
 
         return privateApi(originalRequest)
       } catch (e) {
-        removeTokens()
+        removeRefreshToken()
+        Cookies.remove('accessToken')
         return Promise.reject(e)
       }
     }

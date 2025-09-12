@@ -25,20 +25,14 @@ export function loadTodosList(): Todo[] {
   }
 }
 
-export function saveTokens(accessToken: string, refreshToken: string) {
-  localStorage.setItem('accessToken', accessToken)
+export function saveRefreshToken(refreshToken: string) {
   localStorage.setItem('refreshToken', refreshToken)
-}
-
-export function loadAccessToken(): string | null {
-  return localStorage.getItem('accessToken')
 }
 
 export function loadRefreshToken(): string | null {
   return localStorage.getItem('refreshToken')
 }
 
-export function removeTokens() {
-  localStorage.removeItem('accessToken')
+export function removeRefreshToken() {
   localStorage.removeItem('refreshToken')
 }
