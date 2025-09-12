@@ -5,17 +5,22 @@ import RegistrationPage from './pages/RegistrationPage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import ProfilePage from './pages/ProfilePage'
+import PublicRoute from './components/PublicRoute/PublicRoute'
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/register' element={<RegistrationPage />} />
-        <Route path='*' element={<NotFoundPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<RegistrationPage />} />
+        </Route>
         <Route element={<ProtectedRoute />}>
           <Route index element={<Homepage />} />
+          <Route path='/profile' element={<ProfilePage />} />
         </Route>
+        <Route path='*' element={<NotFoundPage />} />
       </Route>
     </Routes>
   )
