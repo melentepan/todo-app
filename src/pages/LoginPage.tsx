@@ -8,7 +8,7 @@ import { FormBottomTip } from '@/components/FormBottomTip/FormBottomTip'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '@/store/store'
-import { loginUser } from '@/api/auth'
+import { fetchUserProfile, loginUser } from '@/api/auth'
 
 const schema = z.object({
   email: z.string().email('Некорректный email'),
@@ -35,11 +35,10 @@ export default function RegistrationPage() {
   })
 
   const onSubmit = (data: FormData) => {
-    console.log('Вход:', data)
     dispatch(loginUser(data))
       .unwrap()
+      .then(() => dispatch(fetchUserProfile()).unwrap())
       .then(() => navigate('/'))
-      .catch((err) => console.log(err))
   }
 
   return (
