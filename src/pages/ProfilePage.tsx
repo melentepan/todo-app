@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, Input, Button, Typography, Flex } from 'antd'
+import { Form, Input, Button, Typography, Flex, Spin } from 'antd'
 import { StyledForm } from '@/components/StyledForm/StyledForm'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '@/store/store'
@@ -63,19 +63,25 @@ export default function ProfilePage() {
       <CustomDivider>Профиль</CustomDivider>
       <Flex justify='space-evenly'>
         <Flex vertical align='center'>
-          <Title level={5}>Email:</Title> <Text>{user?.email ?? '—'}</Text>
+          <Title level={5}>Email:</Title>{' '}
+          {status === 'loading' ? <Spin /> : <Text>{user?.email ?? '—'}</Text>}
         </Flex>
         <Flex vertical align='center'>
           {' '}
-          <Title level={5}>Возраст:</Title> <Text>{user?.age ?? '—'}</Text>
+          <Title level={5}>Возраст:</Title>{' '}
+          {status === 'loading' ? <Spin /> : <Text>{user?.age ?? '—'}</Text>}
         </Flex>
         <Flex vertical align='center'>
           <Title level={5}>Создан:</Title>{' '}
-          <Text>
-            {user?.createdAt
-              ? new Date(user?.createdAt).toLocaleDateString()
-              : '—'}
-          </Text>
+          {status === 'loading' ? (
+            <Spin />
+          ) : (
+            <Text>
+              {user?.createdAt
+                ? new Date(user?.createdAt).toLocaleDateString()
+                : '—'}
+            </Text>
+          )}
         </Flex>
       </Flex>
       <CustomDivider>Сменить пароль</CustomDivider>

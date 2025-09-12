@@ -2,13 +2,15 @@ import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, Input, Button } from 'antd'
-import { PageHeading } from '@/components/PageHeading/PageHeading'
 import { StyledForm } from '@/components/StyledForm/StyledForm'
 import { FormBottomTip } from '@/components/FormBottomTip/FormBottomTip'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '@/store/store'
-import { fetchUserProfile, loginUser } from '@/api/auth'
+import { loginUser } from '@/api/auth'
+import CustomDivider from '@/components/CustomDivider/CustomDivider'
+import { SpinButton } from '@/components/SpinButton/SpinButton'
+import useAuthState from '@/hooks/useAuthState'
 
 const schema = z.object({
   email: z.string().email('Некорректный email'),
@@ -18,6 +20,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export default function RegistrationPage() {
+  const { status } = useAuthState()
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
@@ -37,13 +40,12 @@ export default function RegistrationPage() {
   const onSubmit = (data: FormData) => {
     dispatch(loginUser(data))
       .unwrap()
-      .then(() => dispatch(fetchUserProfile()).unwrap())
       .then(() => navigate('/'))
   }
 
   return (
     <>
-      <PageHeading>Вход</PageHeading>
+      <CustomDivider>Вход</CustomDivider>
       <StyledForm onFinish={() => handleSubmit(onSubmit)()} layout='vertical'>
         <Form.Item
           label='Email'
@@ -73,7 +75,7 @@ export default function RegistrationPage() {
 
         <Form.Item>
           <Button type='primary' htmlType='submit' block>
-            Войти
+            {status === 'loading' ? <SpinButton /> : 'Войти'}
           </Button>
         </Form.Item>
         <FormBottomTip>
