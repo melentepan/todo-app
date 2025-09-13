@@ -5,7 +5,7 @@ import { Flex } from 'antd'
 import styled from 'styled-components'
 
 const StyledFlex = styled(Flex)`
-  height: 100%;
+  height: calc(100% - 53px);
 `
 
 export default function Homepage() {

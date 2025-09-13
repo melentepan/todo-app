@@ -4,10 +4,9 @@ import { useDispatch } from 'react-redux'
 import { logoutUser } from '@/store/auth/auth.slice'
 import { StyledCircleButton } from '../StyledCircleButton/StyledCircleButton'
 import { UserOutlined } from '@ant-design/icons'
-import useAuthState from '@/hooks/useAuthState'
+import Cookies from 'js-cookie'
 
 export default function ProfileMenu() {
-  const { token } = useAuthState()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -38,7 +37,7 @@ export default function ProfileMenu() {
 
   return (
     <>
-      {token && (
+      {Cookies.get('accessToken') && (
         <Dropdown menu={{ items }} placement='bottomRight'>
           <StyledCircleButton type='primary' shape='circle' size='large'>
             <UserOutlined />

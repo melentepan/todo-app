@@ -8,6 +8,7 @@ import {
   toggleTodo,
 } from '@/api/todos'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit/react'
+import { message } from 'antd'
 
 interface TodoListState {
   todoList: Todo[]
@@ -66,6 +67,7 @@ const todoListSlice = createSlice({
         state.todoList.push(action.payload)
 
         saveTodosList(state.todoList)
+        message.success('Задача успешно добавлена')
       })
       .addCase(addTodo.rejected, (state, action) => {
         state.error = action.payload ?? 'Ошибка загрузки'
@@ -87,6 +89,7 @@ const todoListSlice = createSlice({
           delete todo.loading
         }
         saveTodosList(state.todoList)
+        message.success('Задача успешно изменена')
       })
       .addCase(changeTodo.rejected, (state, action) => {
         const todo = state.todoList.find(
@@ -106,6 +109,7 @@ const todoListSlice = createSlice({
           (todoItem) => todoItem.id !== action.payload
         )
         saveTodosList(state.todoList)
+        message.success('Задача успешно удалена')
       })
       .addCase(deleteTodo.rejected, (state, action) => {
         state.loading = false
@@ -125,6 +129,7 @@ const todoListSlice = createSlice({
           delete todo.loading
         }
         saveTodosList(state.todoList)
+        message.success('Статус задачи успешно изменён')
       })
       .addCase(toggleTodo.rejected, (state, action) => {
         const todo = state.todoList.find((todo) => todo.id === action.meta.arg)
