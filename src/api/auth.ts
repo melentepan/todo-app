@@ -80,7 +80,11 @@ export const changePassword = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue('Неизвестная ошибка')
+      const status = err.response?.status
+
+      if (status === 401) {
+        return rejectWithValue('Неверный старый пароль')
+      }
     }
     return rejectWithValue('Неизвестная ошибка')
   }

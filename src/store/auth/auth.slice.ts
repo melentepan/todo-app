@@ -88,6 +88,7 @@ const authSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state) => {
         state.status = 'idle'
+        message.success('Пароль успешно изменён')
       })
       .addCase(changePassword.rejected, handleRejected)
   },
