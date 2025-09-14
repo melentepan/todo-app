@@ -61,7 +61,7 @@ export const fetchUserProfile = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue('Неизвестная ошибка')
+      return rejectWithValue('Произошла ошибка при загрузке профиля')
     }
     return rejectWithValue('Неизвестная ошибка')
   }

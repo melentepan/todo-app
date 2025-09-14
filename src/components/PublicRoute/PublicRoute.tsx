@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import Cookies from 'js-cookie'
+import useAuthState from '@/hooks/useAuthState'
 
 export default function PublicRoute() {
-  const token = Cookies.get('accessToken')
+  const { token } = useAuthState()
 
   if (token) {
     return <Navigate to='/profile' replace />

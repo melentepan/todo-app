@@ -1,3 +1,5 @@
+import { sessionExpired } from '@/store/auth/auth.slice'
+import { store } from '@/store/store'
 import { refreshAuthTokens } from '@/utils/authHelpers'
 
 import axios from 'axios'
@@ -15,6 +17,8 @@ privateApi.interceptors.request.use((config) => {
   return config
 })
 
+let refreshPromise: Promise<string | null> | null = null
+
 privateApi.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -23,8 +27,18 @@ privateApi.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._isRetry) {
       originalRequest._isRetry = true
 
-      const newAccessToken = await refreshAuthTokens()
+      if (!refreshPromise) {
+        refreshPromise = refreshAuthTokens()
+          .catch(() => null)
+          .finally(() => {
+            refreshPromise = null
+          })
+      }
+
+      const newAccessToken = await refreshPromise
+
       if (!newAccessToken) {
+        store.dispatch(sessionExpired())
         return Promise.reject(error)
       }
 

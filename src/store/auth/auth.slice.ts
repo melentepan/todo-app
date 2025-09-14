@@ -43,6 +43,14 @@ const authSlice = createSlice({
       Cookies.remove('accessToken')
       message.success('Выход выполнен успешно')
     },
+    sessionExpired(state) {
+      state.user = null
+      state.token = null
+      state.status = 'idle'
+      removeRefreshToken()
+      Cookies.remove('accessToken')
+      message.error('Сессия истекла, выполните вход заново')
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -95,4 +103,4 @@ const authSlice = createSlice({
 })
 
 export default authSlice.reducer
-export const { logoutUser } = authSlice.actions
+export const { logoutUser, sessionExpired } = authSlice.actions

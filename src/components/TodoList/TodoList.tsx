@@ -55,14 +55,14 @@ const StatusButton = styled(Button)`
 `
 
 interface StyledListProps<T> extends ListProps<T> {
-  isEmpty: boolean
+  $isEmpty: boolean
 }
 
 const StyledList = styled(List)<StyledListProps<Todo>>`
   margin-top: 20px;
   height: 100%;
   ${(props) =>
-    props.isEmpty &&
+    props.$isEmpty &&
     `
       display: flex;
       justify-content: center;
@@ -138,7 +138,7 @@ export default function TodoList() {
             />
           </Flex>
           <StyledList
-            isEmpty={todoList.length === 0}
+            $isEmpty={todoList.length === 0}
             itemLayout='horizontal'
             dataSource={todoSorting(todoList, status, order)}
             locale={{
