@@ -27,7 +27,7 @@ const handleRejected = (
   action: PayloadAction<string | undefined>
 ) => {
   state.status = 'failed'
-
+  console.log(action.payload)
   showMessage.error(action.payload ?? 'Произошла неизвестная ошибка')
 }
 
@@ -49,7 +49,6 @@ const authSlice = createSlice({
       state.status = 'idle'
       removeRefreshToken()
       Cookies.remove('accessToken')
-      showMessage.error('Сессия истекла, выполните вход заново')
     },
   },
   extraReducers: (builder) => {

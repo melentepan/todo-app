@@ -39,13 +39,13 @@ privateApi.interceptors.response.use(
 
       if (!newAccessToken) {
         store.dispatch(sessionExpired())
-        return Promise.reject(error)
+        return Promise.reject('Сессия истекла, выполните вход заново')
       }
 
       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
       return privateApi(originalRequest)
     }
 
-    return Promise.reject(error)
+    return Promise.reject('Сессия истекла, выполните вход заново')
   }
 )

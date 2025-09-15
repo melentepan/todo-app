@@ -16,7 +16,10 @@ export const fetchTodos = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при загрузке списка задач')
+    }
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
     }
     return rejectWithValue('Произошла неизвестная ошибка')
   }
@@ -29,7 +32,6 @@ export const addTodo = createAsyncThunk<
 >('todos/addTodo', async (body, { getState, rejectWithValue, dispatch }) => {
   try {
     const response = await privateApi.post<Todo>('/todos', body)
-
     const state = getState()
     const { limit, page } = state.todoList
     dispatch(fetchTodos({ limit, page }))
@@ -37,7 +39,10 @@ export const addTodo = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при добавлении задачи')
+    }
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
     }
     return rejectWithValue('Произошла неизвестная ошибка')
   }
@@ -53,7 +58,10 @@ export const changeTodo = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при изменении задачи')
+    }
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
     }
     return rejectWithValue('Произошла неизвестная ошибка')
   }
@@ -66,7 +74,6 @@ export const deleteTodo = createAsyncThunk<
 >('todos/deleteTodo', async (id, { getState, rejectWithValue, dispatch }) => {
   try {
     await privateApi.delete(`/todos/${id}`)
-
     const state = getState()
     const { limit, page } = state.todoList
     dispatch(fetchTodos({ limit, page }))
@@ -74,7 +81,10 @@ export const deleteTodo = createAsyncThunk<
     return id
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при удалении задачи')
+    }
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
     }
     return rejectWithValue('Произошла неизвестная ошибка')
   }
@@ -90,7 +100,10 @@ export const toggleTodo = createAsyncThunk<
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при изменении статуса задачи')
+    }
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
     }
     return rejectWithValue('Произошла неизвестная ошибка')
   }
