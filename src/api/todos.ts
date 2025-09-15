@@ -18,7 +18,7 @@ export const fetchTodos = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -39,7 +39,7 @@ export const addTodo = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -55,7 +55,7 @@ export const changeTodo = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -76,7 +76,7 @@ export const deleteTodo = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -92,6 +92,6 @@ export const toggleTodo = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       return rejectWithValue(err.response?.data?.message || 'Ошибка запроса')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })

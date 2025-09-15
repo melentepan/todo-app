@@ -27,7 +27,7 @@ export const registerUser = createAsyncThunk<
         return rejectWithValue('Аккаунт с таким e-mail уже существует')
       }
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -47,7 +47,7 @@ export const loginUser = createAsyncThunk<
         return rejectWithValue('Неверный логин или пароль')
       }
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -63,7 +63,7 @@ export const fetchUserProfile = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       return rejectWithValue('Произошла ошибка при загрузке профиля')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -86,6 +86,6 @@ export const changePassword = createAsyncThunk<
         return rejectWithValue('Неверный старый пароль')
       }
     }
-    return rejectWithValue('Неизвестная ошибка')
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })

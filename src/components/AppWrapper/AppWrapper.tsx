@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { darkTheme, lightTheme } from '@/theme'
 import GlobalStyle from '@/GlobalStyles'
 import styled, { ThemeProvider } from 'styled-components'
+import MessageProvider from '../MessageProvider/MessageProvider'
 
 const Wrapper = styled.div`
   height: calc(100vh - 20px);
@@ -40,8 +41,10 @@ export default function AppWrapper({ children, isDark }: AppWrapperProps) {
           },
         }}
       >
-        <GlobalStyle />
-        <Wrapper>{children}</Wrapper>
+        <MessageProvider>
+          <GlobalStyle />
+          <Wrapper>{children}</Wrapper>
+        </MessageProvider>
       </ConfigProvider>
     </ThemeProvider>
   )

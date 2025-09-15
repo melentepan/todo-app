@@ -8,7 +8,7 @@ import type { UserProfile } from '@/types'
 import { removeRefreshToken, saveRefreshToken } from '@/utils/localStorage'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
-import { message } from 'antd'
+import { showMessage } from '@/utils/messageService'
 
 interface AuthState {
   user: UserProfile | null
@@ -28,7 +28,7 @@ const handleRejected = (
 ) => {
   state.status = 'failed'
 
-  message.error(action.payload)
+  showMessage.error(action.payload ?? 'Произошла неизвестная ошибка')
 }
 
 const authSlice = createSlice({
@@ -41,7 +41,7 @@ const authSlice = createSlice({
       state.status = 'idle'
       removeRefreshToken()
       Cookies.remove('accessToken')
-      message.success('Выход выполнен успешно')
+      showMessage.success('Выход выполнен успешно')
     },
     sessionExpired(state) {
       state.user = null
@@ -49,7 +49,7 @@ const authSlice = createSlice({
       state.status = 'idle'
       removeRefreshToken()
       Cookies.remove('accessToken')
-      message.error('Сессия истекла, выполните вход заново')
+      showMessage.error('Сессия истекла, выполните вход заново')
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +63,7 @@ const authSlice = createSlice({
         state.token = action.payload.accessToken
         saveRefreshToken(action.payload.refreshToken)
         Cookies.set('accessToken', action.payload.accessToken)
-        message.success('Регистрация выполнена успешно')
+        showMessage.success('Регистрация выполнена успешно')
       })
       .addCase(registerUser.rejected, handleRejected)
 
@@ -76,7 +76,7 @@ const authSlice = createSlice({
         state.token = action.payload.accessToken
         saveRefreshToken(action.payload.refreshToken)
         Cookies.set('accessToken', action.payload.accessToken)
-        message.success('Вход выполнен успешно')
+        showMessage.success('Вход выполнен успешно')
       })
       .addCase(loginUser.rejected, handleRejected)
 
@@ -96,7 +96,7 @@ const authSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state) => {
         state.status = 'idle'
-        message.success('Пароль успешно изменён')
+        showMessage.success('Пароль успешно изменён')
       })
       .addCase(changePassword.rejected, handleRejected)
   },
