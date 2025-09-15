@@ -20,6 +20,15 @@ interface TodoListState {
   total: number
 }
 
+const handleRejected = (
+  state: TodoListState,
+  action: PayloadAction<string | undefined>
+) => {
+  state.loading = false
+  state.error = action.payload ?? 'Произошла неизвестная ошибка'
+  showMessage.error(state.error)
+}
+
 const initialState: TodoListState = {
   todoList: loadTodosList(),
   editingTodo: null,
@@ -46,6 +55,7 @@ const todoListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Fetch todos
       .addCase(fetchTodos.pending, (state) => {
         state.loading = true
         state.error = null
@@ -56,22 +66,20 @@ const todoListSlice = createSlice({
         state.total = action.payload.total
         saveTodosList(state.todoList)
       })
-      .addCase(fetchTodos.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload ?? 'Ошибка загрузки'
-      })
+      .addCase(fetchTodos.rejected, handleRejected)
+
+      // Add todo
       .addCase(addTodo.pending, (state) => {
         state.error = null
       })
       .addCase(addTodo.fulfilled, (state, action) => {
         state.todoList.push(action.payload)
-
         saveTodosList(state.todoList)
         showMessage.success('Задача успешно добавлена')
       })
-      .addCase(addTodo.rejected, (state, action) => {
-        state.error = action.payload ?? 'Ошибка загрузки'
-      })
+      .addCase(addTodo.rejected, handleRejected)
+
+      // Change todo
       .addCase(changeTodo.pending, (state, action) => {
         const todo = state.todoList.find(
           (todo) => todo.id === action.meta.arg.id
@@ -96,25 +104,26 @@ const todoListSlice = createSlice({
           (todo) => todo.id === action.meta.arg.id
         )
         if (todo) delete todo.loading
-        state.error = action.payload ?? 'Ошибка загрузки'
+        state.error = action.payload ?? 'Произошла неизвестная ошибка'
+        showMessage.error(state.error)
       })
+
+      // Delete todo
       .addCase(deleteTodo.pending, (state) => {
         state.loading = true
         state.error = null
       })
       .addCase(deleteTodo.fulfilled, (state, action) => {
         state.loading = false
-
         state.todoList = state.todoList.filter(
           (todoItem) => todoItem.id !== action.payload
         )
         saveTodosList(state.todoList)
         showMessage.success('Задача успешно удалена')
       })
-      .addCase(deleteTodo.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload ?? 'Ошибка загрузки'
-      })
+      .addCase(deleteTodo.rejected, handleRejected)
+
+      // Toggle todo
       .addCase(toggleTodo.pending, (state, action) => {
         const todo = state.todoList.find((todo) => todo.id === action.meta.arg)
         if (todo) todo.loading = true
@@ -133,9 +142,9 @@ const todoListSlice = createSlice({
       })
       .addCase(toggleTodo.rejected, (state, action) => {
         const todo = state.todoList.find((todo) => todo.id === action.meta.arg)
-        if (todo) todo.loading = false
-
-        state.error = action.payload ?? 'Ошибка загрузки'
+        if (todo) delete todo.loading
+        state.error = action.payload ?? 'Произошла неизвестная ошибка'
+        showMessage.error(state.error)
       })
   },
 })
