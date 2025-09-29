@@ -1,0 +1,89 @@
+import { useForm, Controller } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Form, Input, Button } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import type { AppDispatch } from '@/store'
+import { loginUser } from '@/api/auth'
+import { useAuthState } from '@/hooks/useAuthState'
+import {
+  CustomDivider,
+  FormBottomTip,
+  SpinButton,
+  StyledForm,
+} from '@components'
+
+const schema = z.object({
+  email: z.string().email('Некорректный email'),
+  password: z.string().min(6, 'Пароль минимум 6 символов'),
+})
+
+type FormData = z.infer<typeof schema>
+
+export function LoginPage() {
+  const { status } = useAuthState()
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    mode: 'onChange',
+  })
+
+  const onSubmit = (data: FormData) => {
+    dispatch(loginUser(data))
+      .unwrap()
+      .then(() => navigate('/'))
+  }
+
+  return (
+    <>
+      <CustomDivider>Вход</CustomDivider>
+      <StyledForm onFinish={() => handleSubmit(onSubmit)()} layout='vertical'>
+        <Form.Item
+          label='Email'
+          validateStatus={errors.email ? 'error' : ''}
+          help={errors.email?.message}
+        >
+          <Controller
+            name='email'
+            control={control}
+            render={({ field }) => <Input {...field} placeholder='Email' />}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label='Пароль'
+          validateStatus={errors.password ? 'error' : ''}
+          help={errors.password?.message}
+        >
+          <Controller
+            name='password'
+            control={control}
+            render={({ field }) => (
+              <Input.Password {...field} placeholder='Пароль' />
+            )}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type='primary' htmlType='submit' block>
+            {status === 'loading' ? <SpinButton /> : 'Войти'}
+          </Button>
+        </Form.Item>
+        <FormBottomTip>
+          Нет аккаунта? <Link to='/register'>Зарегистрироваться</Link>
+        </FormBottomTip>
+      </StyledForm>
+    </>
+  )
+}

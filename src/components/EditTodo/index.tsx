@@ -1,15 +1,15 @@
 import { Modal } from 'antd'
 import { useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import ValidatedInput from '../ValidatedInput/ValidatedInput'
-import { useInput } from '../../hooks/useInput'
-import useTodoList from '../../hooks/useTodoList'
+import { ValidatedInput } from '@components'
+import { useInput } from '@/hooks/useInput'
+import { useTodoList } from '@/hooks/useTodoList'
 import { useDispatch } from 'react-redux'
-import { setEditingTodo } from '../../store/todoList/todoList.slice'
-import type { AppDispatch } from '../../store/store'
-import { changeTodo } from '../../api/todos'
+import { setEditingTodo } from '@/store/todoList/todoList.slice'
+import type { AppDispatch } from '@/store'
+import { changeTodo } from '@/api/todos'
 
-export default function EditTodo() {
+export function EditTodo() {
   const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
     useInput('')
 

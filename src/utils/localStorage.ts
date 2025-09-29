@@ -1,4 +1,4 @@
-import type { Todo } from '../types'
+import type { Todo } from '@/types'
 
 export function saveIsDarkTheme(theme: boolean) {
   localStorage.setItem('theme', theme ? 'dark' : 'light')
@@ -23,4 +23,16 @@ export function loadTodosList(): Todo[] {
   } catch {
     return []
   }
+}
+
+export function saveRefreshToken(refreshToken: string) {
+  localStorage.setItem('refreshToken', refreshToken)
+}
+
+export function loadRefreshToken(): string | null {
+  return localStorage.getItem('refreshToken')
+}
+
+export function removeRefreshToken() {
+  localStorage.removeItem('refreshToken')
 }

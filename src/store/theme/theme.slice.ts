@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loadIsDarkTheme, saveIsDarkTheme } from '../../utils/localStorage'
+import { loadIsDarkTheme, saveIsDarkTheme } from '@/utils/localStorage'
 
 interface ThemeState {
   isDark: boolean
@@ -21,6 +21,6 @@ const themeSlice = createSlice({
   },
 })
 
-export default themeSlice.reducer
+export const themeReducer = themeSlice.reducer
 
 export const { switchTheme } = themeSlice.actions

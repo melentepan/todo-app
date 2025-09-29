@@ -1,25 +1,34 @@
-import CustomDivider from '../CustomDivider/CustomDivider'
-import { Button, Empty, Flex, List, Pagination, Spin } from 'antd'
-import TodoItem from '../TodoItem/TodoItem'
+import { CustomDivider } from '@components'
+import {
+  Button,
+  Empty,
+  Flex,
+  List,
+  Pagination,
+  Spin,
+  type ListProps,
+} from 'antd'
+import { TodoItem } from '@components'
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
-import { statusText } from '../../constants'
-import todoSorting from '../../utils/todoSorting'
-import useTodoList from '../../hooks/useTodoList'
+import { statusText } from '@/constants'
+import { todoSorting } from '@/utils/todoSorting'
+import { useTodoList } from '@/hooks/useTodoList'
 import { useDispatch } from 'react-redux'
 import {
   switchOrder,
   switchStatus,
-} from '../../store/sortingTodoList/sortingTodoList.slice'
-import useSortingTodoList from '../../hooks/useSortingTodoList'
+} from '@/store/sortingTodoList/sortingTodoList.slice'
+import { useSortingTodoList } from '@/hooks/useSortingTodoList'
 import { useEffect } from 'react'
-import { fetchTodos } from '../../api/todos'
-import type { AppDispatch } from '../../store/store'
+import { fetchTodos } from '@/api/todos'
+import type { AppDispatch } from '@/store'
 import styled from 'styled-components'
-import { setLimit, setPage } from '../../store/todoList/todoList.slice'
+import { setLimit, setPage } from '@/store/todoList/todoList.slice'
+import type { Todo } from '@/types'
 
 const SpinTip = styled.span`
   opacity: 0.75;
@@ -36,7 +45,36 @@ const ErrorIcon = styled(InfoCircleOutlined)`
   font-size: 24px;
 `
 
-export default function TodoList() {
+const StyledFlex = styled(Flex)`
+  height: 100%;
+  margin-top: 20px;
+`
+
+const StatusButton = styled(Button)`
+  width: 100%;
+`
+
+interface StyledListProps<T> extends ListProps<T> {
+  $isEmpty: boolean
+}
+
+const StyledList = styled(List)<StyledListProps<Todo>>`
+  margin-top: 20px;
+  height: 100%;
+  ${(props) =>
+    props.$isEmpty &&
+    `
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `}
+`
+
+const StyledPagination = styled(Pagination)`
+  margin: 0 auto;
+`
+
+export function TodoList() {
   const { todoList, loading, error, limit, page, total } = useTodoList()
   const dispatch = useDispatch<AppDispatch>()
   const { status, order } = useSortingTodoList()
@@ -66,40 +104,28 @@ export default function TodoList() {
       <CustomDivider>Список задач</CustomDivider>
 
       {loading ? (
-        <Flex
-          vertical
-          justify='center'
-          align='center'
-          style={{ marginTop: '20px', height: '100%' }}
-        >
+        <StyledFlex vertical justify='center' align='center'>
           <Spin size='large' />
           <SpinTip>Загрузка</SpinTip>
-        </Flex>
+        </StyledFlex>
       ) : error ? (
-        <Flex
-          gap={10}
-          vertical
-          justify='center'
-          align='center'
-          style={{ marginTop: '20px', height: '100%' }}
-        >
+        <StyledFlex gap={10} vertical justify='center' align='center'>
           <Flex gap={10} align='center'>
             <ErrorIcon />
             <ErrorTip>{error}</ErrorTip>
           </Flex>
           <Button onClick={onErrorHandler}>Повторить</Button>
-        </Flex>
+        </StyledFlex>
       ) : (
         <>
           <Flex gap={10}>
-            <Button
+            <StatusButton
               size='large'
               type='primary'
-              style={{ width: '100%' }}
               onClick={statusButtonHandler}
             >
               {statusText[status]}
-            </Button>
+            </StatusButton>
             <Button
               size='large'
               type='primary'
@@ -111,18 +137,8 @@ export default function TodoList() {
               onClick={orderButtonHandler}
             />
           </Flex>
-          <List
-            style={{
-              ...(todoList.length === 0
-                ? {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }
-                : {}),
-              marginTop: '20px',
-              height: '100%',
-            }}
+          <StyledList
+            $isEmpty={todoList.length === 0}
             itemLayout='horizontal'
             dataSource={todoSorting(todoList, status, order)}
             locale={{
@@ -137,8 +153,7 @@ export default function TodoList() {
           />
         </>
       )}
-      <Pagination
-        style={{ margin: '0 auto' }}
+      <StyledPagination
         showSizeChanger
         defaultCurrent={1}
         defaultPageSize={5}

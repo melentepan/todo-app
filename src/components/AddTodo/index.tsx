@@ -1,13 +1,13 @@
 import { Button, Flex } from 'antd'
-import CustomDivider from '../CustomDivider/CustomDivider'
-import type { AddTodoBody } from '../../types'
-import ValidatedInput from '../ValidatedInput/ValidatedInput'
-import { useInput } from '../../hooks/useInput'
-import { useDispatch } from 'react-redux'
-import { addTodo } from '../../api/todos'
-import type { AppDispatch } from '../../store/store'
+import { useInput } from '@/hooks/useInput'
+import { addTodo } from '@/api/todos'
+import type { AddTodoBody } from '@/types'
+import type { AppDispatch } from '@/store'
+import { CustomDivider, ValidatedInput } from '@components'
 
-export default function AddTodo() {
+import { useDispatch } from 'react-redux'
+
+export function AddTodo() {
   const dispatch = useDispatch<AppDispatch>()
   const { inputValue, setInputValue, isValid, onChange, validate, setIsValid } =
     useInput('')

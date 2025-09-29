@@ -1,38 +1,21 @@
-import { Button, Flex } from 'antd'
-import AddTodo from './components/AddTodo/AddTodo'
-import TodoList from './components/TodoList/TodoList'
-import EditTodo from './components/EditTodo/EditTodo'
-import { MoonFilled, SunFilled } from '@ant-design/icons'
-import AppWrapper from './components/AppWrapper/AppWrapper'
-import { useDispatch } from 'react-redux'
-import { switchTheme } from './store/theme/theme.slice'
-import useTheme from './hooks/useTheme'
-function App() {
-  const dispatch = useDispatch()
-  const { isDark } = useTheme()
+import { Route, Routes } from 'react-router-dom'
+import { Layout, ProtectedRoute, PublicRoute } from '@components'
+import { Homepage, LoginPage, NotFoundPage, ProfilePage, RegistrationPage } from '@pages'
 
-  function changeThemeHandler() {
-    dispatch(switchTheme())
-  }
-
+export function App() {
   return (
-    <AppWrapper isDark={isDark}>
-      <Flex vertical style={{ height: '100%' }}>
-        <Button
-          type='primary'
-          shape='circle'
-          size='large'
-          onClick={changeThemeHandler}
-          style={{ alignSelf: 'center', marginTop: '5px', flexShrink: '0' }}
-        >
-          {isDark ? <SunFilled /> : <MoonFilled />}
-        </Button>
-        <AddTodo />
-        <TodoList />
-      </Flex>
-      <EditTodo />
-    </AppWrapper>
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        <Route element={<PublicRoute />}>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<RegistrationPage />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route index element={<Homepage />} />
+          <Route path='/profile' element={<ProfilePage />} />
+        </Route>
+        <Route path='*' element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   )
 }
-
-export default App

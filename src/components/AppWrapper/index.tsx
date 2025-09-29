@@ -1,9 +1,10 @@
 import { ConfigProvider, theme as antdTheme } from 'antd'
 import ru_RU from 'antd/locale/ru_RU'
 import type { ReactNode } from 'react'
-import { darkTheme, lightTheme } from '../../theme'
-import GlobalStyle from '../../GlobalStyles'
+import { darkTheme, lightTheme } from '@/theme'
 import styled, { ThemeProvider } from 'styled-components'
+import { MessageProvider } from '@components'
+import { GlobalStyle } from '@/GlobalStyles'
 
 const Wrapper = styled.div`
   height: calc(100vh - 20px);
@@ -22,11 +23,11 @@ interface AppWrapperProps {
   isDark: boolean
 }
 
-export default function AppWrapper({ children, isDark }: AppWrapperProps) {
-  const styledTheme = isDark ? darkTheme : lightTheme
+export function AppWrapper({ children, isDark }: AppWrapperProps) {
+  const theme = isDark ? darkTheme : lightTheme
 
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+    <ThemeProvider theme={theme}>
       <ConfigProvider
         locale={ru_RU}
         theme={{
@@ -34,14 +35,16 @@ export default function AppWrapper({ children, isDark }: AppWrapperProps) {
             ? antdTheme.darkAlgorithm
             : antdTheme.defaultAlgorithm,
           token: {
-            colorPrimary: styledTheme.primary,
-            colorBgBase: styledTheme.background,
-            colorText: styledTheme.text,
+            colorPrimary: theme.primary,
+            colorBgBase: theme.background,
+            colorText: theme.text,
           },
         }}
       >
-        <GlobalStyle />
-        <Wrapper>{children}</Wrapper>
+        <MessageProvider>
+          <GlobalStyle />
+          <Wrapper>{children}</Wrapper>
+        </MessageProvider>
       </ConfigProvider>
     </ThemeProvider>
   )

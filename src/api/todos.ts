@@ -1,9 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { privateApi } from './privateApi'
+import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '@/types'
+import type { AppDispatch, RootState } from '@/store'
 import axios from 'axios'
-import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '../types'
-import type { AppDispatch, RootState } from '../store/store'
-
-const API_URL = 'http://localhost:3001/todos'
 
 export const fetchTodos = createAsyncThunk<
   TodoResponse,
@@ -11,15 +10,18 @@ export const fetchTodos = createAsyncThunk<
   { rejectValue: string }
 >('todos/fetchTodos', async ({ page, limit }, { rejectWithValue }) => {
   try {
-    const response = await axios.get<TodoResponse>(
-      `${API_URL}?page=${page}&limit=${limit}`
-    )
+    const response = await privateApi.get<TodoResponse>('/todos', {
+      params: { page, limit },
+    })
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при загрузке списка задач')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
+    }
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -29,19 +31,20 @@ export const addTodo = createAsyncThunk<
   { state: RootState; rejectValue: string; dispatch: AppDispatch }
 >('todos/addTodo', async (body, { getState, rejectWithValue, dispatch }) => {
   try {
-    const response = await axios.post<Todo>(`${API_URL}`, body)
-
+    const response = await privateApi.post<Todo>('/todos', body)
     const state = getState()
     const { limit, page } = state.todoList
-
     dispatch(fetchTodos({ limit, page }))
 
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при добавлении задачи')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
+    }
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -51,33 +54,39 @@ export const changeTodo = createAsyncThunk<
   { rejectValue: string }
 >('todos/changeTodo', async ({ id, body }, { rejectWithValue }) => {
   try {
-    const response = await axios.put<Todo>(`${API_URL}/${id}`, body)
+    const response = await privateApi.put<Todo>(`/todos/${id}`, body)
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при изменении задачи')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
+    }
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
 export const deleteTodo = createAsyncThunk<
   number,
   number,
-  { state: RootState; rejectValue: string }
+  { state: RootState; rejectValue: string; dispatch: AppDispatch }
 >('todos/deleteTodo', async (id, { getState, rejectWithValue, dispatch }) => {
   try {
-    await axios.delete(`${API_URL}/${id}`)
+    await privateApi.delete(`/todos/${id}`)
     const state = getState()
     const { limit, page } = state.todoList
-
     dispatch(fetchTodos({ limit, page }))
+
     return id
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при удалении задачи')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
+    }
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })
 
@@ -87,12 +96,15 @@ export const toggleTodo = createAsyncThunk<
   { rejectValue: string }
 >('todos/toggleTodo', async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.patch<Todo>(`${API_URL}/${id}/toggle`)
+    const response = await privateApi.patch<Todo>(`/todos/${id}/toggle`)
     return response.data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      return rejectWithValue(err.response?.statusText || 'Ошибка запроса')
+      return rejectWithValue('Ошибка при изменении статуса задачи')
     }
-    return rejectWithValue('Неизвестная ошибка')
+    if (typeof err === 'string') {
+      return rejectWithValue(err)
+    }
+    return rejectWithValue('Произошла неизвестная ошибка')
   }
 })

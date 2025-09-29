@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { StatusType } from '../../types'
-import { statusCycle } from '../../constants'
+import type { StatusType } from '@/types'
+import { statusCycle } from '@/constants'
 
 interface SortingTodoListState {
   status: StatusType
@@ -12,7 +12,7 @@ const initialState: SortingTodoListState = {
   order: 'desc',
 }
 
-const sortingTodoList = createSlice({
+const sortingTodoListSlice = createSlice({
   name: 'sortingTodoList',
   initialState,
   reducers: {
@@ -31,6 +31,6 @@ const sortingTodoList = createSlice({
   },
 })
 
-export default sortingTodoList.reducer
+export const sortingTodoListReducer = sortingTodoListSlice.reducer
 
-export const { switchOrder, switchStatus } = sortingTodoList.actions
+export const { switchOrder, switchStatus } = sortingTodoListSlice.actions
