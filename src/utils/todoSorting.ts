@@ -1,6 +1,6 @@
 import type { StatusType, Todo } from '@/types'
 
-export default function todoSorting(
+export function todoSorting(
   todosList: Todo[],
   status: StatusType,
   order: 'asc' | 'desc'

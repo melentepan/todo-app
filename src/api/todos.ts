@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { privateApi } from './privateApi'
 import type { AddTodoBody, Todo, TodoResponse, UpdateTodoBody } from '@/types'
-import type { AppDispatch, RootState } from '@/store/store'
+import type { AppDispatch, RootState } from '@/store'
 import axios from 'axios'
 
 export const fetchTodos = createAsyncThunk<

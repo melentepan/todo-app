@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import useAuthState from '@/hooks/useAuthState'
+import { useAuthState } from '@/hooks/useAuthState'
 
-export default function ProtectedRoute() {
+export function ProtectedRoute() {
   const { token } = useAuthState()
 
   if (!token) {

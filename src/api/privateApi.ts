@@ -1,5 +1,5 @@
 import { sessionExpired } from '@/store/auth/auth.slice'
-import { store } from '@/store/store'
+import { store } from '@/store'
 import { refreshAuthTokens } from '@/utils/authHelpers'
 
 import axios from 'axios'

@@ -1,6 +1,4 @@
-import AddTodo from '@/components/AddTodo/AddTodo'
-import EditTodo from '@/components/EditTodo/EditTodo'
-import TodoList from '@/components/TodoList/TodoList'
+import { AddTodo, EditTodo, TodoList } from '@components'
 import { Flex } from 'antd'
 import styled from 'styled-components'
 
@@ -8,7 +6,7 @@ const StyledFlex = styled(Flex)`
   height: calc(100% - 53px);
 `
 
-export default function Homepage() {
+export function Homepage() {
   return (
     <>
       <StyledFlex vertical>

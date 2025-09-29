@@ -2,9 +2,9 @@ import { ConfigProvider, theme as antdTheme } from 'antd'
 import ru_RU from 'antd/locale/ru_RU'
 import type { ReactNode } from 'react'
 import { darkTheme, lightTheme } from '@/theme'
-import GlobalStyle from '@/GlobalStyles'
 import styled, { ThemeProvider } from 'styled-components'
-import MessageProvider from '../MessageProvider/MessageProvider'
+import { MessageProvider } from '@components'
+import { GlobalStyle } from '@/GlobalStyles'
 
 const Wrapper = styled.div`
   height: calc(100vh - 20px);
@@ -23,7 +23,7 @@ interface AppWrapperProps {
   isDark: boolean
 }
 
-export default function AppWrapper({ children, isDark }: AppWrapperProps) {
+export function AppWrapper({ children, isDark }: AppWrapperProps) {
   const theme = isDark ? darkTheme : lightTheme
 
   return (

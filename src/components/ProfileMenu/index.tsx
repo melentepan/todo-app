@@ -2,11 +2,11 @@ import { Dropdown, type MenuProps } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logoutUser } from '@/store/auth/auth.slice'
-import { StyledCircleButton } from '../StyledCircleButton/StyledCircleButton'
+import { StyledCircleButton } from '../StyledCircleButton'
 import { UserOutlined } from '@ant-design/icons'
 import Cookies from 'js-cookie'
 
-export default function ProfileMenu() {
+export function ProfileMenu() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 

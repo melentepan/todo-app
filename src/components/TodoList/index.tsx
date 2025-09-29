@@ -1,4 +1,4 @@
-import CustomDivider from '@/components/CustomDivider/CustomDivider'
+import { CustomDivider } from '@components'
 import {
   Button,
   Empty,
@@ -8,24 +8,24 @@ import {
   Spin,
   type ListProps,
 } from 'antd'
-import TodoItem from '@/components/TodoItem/TodoItem'
+import { TodoItem } from '@components'
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
 import { statusText } from '@/constants'
-import todoSorting from '@/utils/todoSorting'
-import useTodoList from '@/hooks/useTodoList'
+import { todoSorting } from '@/utils/todoSorting'
+import { useTodoList } from '@/hooks/useTodoList'
 import { useDispatch } from 'react-redux'
 import {
   switchOrder,
   switchStatus,
 } from '@/store/sortingTodoList/sortingTodoList.slice'
-import useSortingTodoList from '@/hooks/useSortingTodoList'
+import { useSortingTodoList } from '@/hooks/useSortingTodoList'
 import { useEffect } from 'react'
 import { fetchTodos } from '@/api/todos'
-import type { AppDispatch } from '@/store/store'
+import type { AppDispatch } from '@/store'
 import styled from 'styled-components'
 import { setLimit, setPage } from '@/store/todoList/todoList.slice'
 import type { Todo } from '@/types'
@@ -74,7 +74,7 @@ const StyledPagination = styled(Pagination)`
   margin: 0 auto;
 `
 
-export default function TodoList() {
+export function TodoList() {
   const { todoList, loading, error, limit, page, total } = useTodoList()
   const dispatch = useDispatch<AppDispatch>()
   const { status, order } = useSortingTodoList()

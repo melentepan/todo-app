@@ -1,5 +1,5 @@
 import { useTypedSelector } from './useTypedSelector'
 
-export default function useSortingTodoList() {
+export function useSortingTodoList() {
   return useTypedSelector((state) => state.sortingTodoList)
 }

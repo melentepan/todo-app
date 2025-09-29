@@ -3,15 +3,17 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, Input, InputNumber, Button } from 'antd'
 import styled from 'styled-components'
-import { StyledForm } from '@/components/StyledForm/StyledForm'
-import { FormBottomTip } from '@/components/FormBottomTip/FormBottomTip'
+import { useAuthState } from '@/hooks/useAuthState'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerUser } from '@/api/auth'
 import { useDispatch } from 'react-redux'
-import type { AppDispatch } from '@/store/store'
-import CustomDivider from '@/components/CustomDivider/CustomDivider'
-import { SpinButton } from '@/components/SpinButton/SpinButton'
-import useAuthState from '@/hooks/useAuthState'
+import type { AppDispatch } from '@/store'
+import {
+  CustomDivider,
+  FormBottomTip,
+  SpinButton,
+  StyledForm,
+} from '@components'
 
 const StyledInputNumber = styled(InputNumber)`
   width: 100%;
@@ -31,7 +33,7 @@ const schema = z
 
 type FormData = z.infer<typeof schema>
 
-export default function RegistrationPage() {
+export function RegistrationPage() {
   const { status } = useAuthState()
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()

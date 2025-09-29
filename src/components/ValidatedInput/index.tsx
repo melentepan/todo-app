@@ -13,7 +13,7 @@ interface ValidatedInputProps {
   onFocus: () => void
 }
 
-export default function ValidatedInput({
+export function ValidatedInput({
   isValid,
   inputValue,
   onChange,

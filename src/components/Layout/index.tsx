@@ -1,17 +1,19 @@
-import useTheme from '@/hooks/useTheme'
-import AppWrapper from '../AppWrapper/AppWrapper'
+import { useTheme } from '@/hooks/useTheme'
+import {
+  AppWrapper,
+  ChangeThemeButton,
+  MainPageButton,
+  ProfileMenu,
+} from '@components'
 import { Outlet } from 'react-router-dom'
-import ChangeThemeButton from '../ChangeThemeButton/ChangeThemeButton'
 import { Flex } from 'antd'
 import styled from 'styled-components'
-import ProfileMenu from '../ProfileMenu/ProfileMenu'
-import MainPageButton from '../MainPageButton/MainPageButton'
 
 const StyledFlex = styled(Flex)`
   margin-bottom: 8px;
 `
 
-export default function Layout() {
+export function Layout() {
   const { isDark } = useTheme()
 
   return (

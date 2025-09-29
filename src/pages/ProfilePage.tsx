@@ -2,14 +2,12 @@ import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, Input, Button, Typography, Flex, Spin } from 'antd'
-import { StyledForm } from '@/components/StyledForm/StyledForm'
+import { CustomDivider, StyledForm, SpinButton } from '@components'
 import { useDispatch } from 'react-redux'
-import type { AppDispatch } from '@/store/store'
+import type { AppDispatch } from '@/store'
 import { changePassword, fetchUserProfile } from '@/api/auth'
-import useAuthState from '@/hooks/useAuthState'
-import CustomDivider from '@/components/CustomDivider/CustomDivider'
+import { useAuthState } from '@/hooks/useAuthState'
 import { useEffect } from 'react'
-import { SpinButton } from '@/components/SpinButton/SpinButton'
 
 const { Title, Text } = Typography
 
@@ -30,7 +28,7 @@ const schema = z
 
 type FormData = z.infer<typeof schema>
 
-export default function ProfilePage() {
+export function ProfilePage() {
   const dispatch = useDispatch<AppDispatch>()
   const { user, status } = useAuthState()
   const {

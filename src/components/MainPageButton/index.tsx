@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { StyledCircleButton } from '../StyledCircleButton/StyledCircleButton'
+import { StyledCircleButton } from '../StyledCircleButton'
 import { HomeFilled } from '@ant-design/icons'
 
-export default function MainPageButton() {
+export function MainPageButton() {
   const navigate = useNavigate()
   const location = useLocation()
 

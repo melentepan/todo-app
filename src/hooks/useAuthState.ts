@@ -1,5 +1,5 @@
 import { useTypedSelector } from './useTypedSelector'
 
-export default function useAuthState() {
+export function useAuthState() {
   return useTypedSelector((state) => state.auth)
 }

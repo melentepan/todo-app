@@ -1,10 +1,10 @@
-import useTheme from '@/hooks/useTheme'
+import { useTheme } from '@/hooks/useTheme'
 import { switchTheme } from '@/store/theme/theme.slice'
 import { MoonFilled, SunFilled } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { StyledCircleButton } from '../StyledCircleButton/StyledCircleButton'
+import { StyledCircleButton } from '../StyledCircleButton'
 
-export default function ChangeThemeButton() {
+export function ChangeThemeButton() {
   const dispatch = useDispatch()
   const { isDark } = useTheme()
 

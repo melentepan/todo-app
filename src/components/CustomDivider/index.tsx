@@ -1,7 +1,7 @@
 import { Divider } from 'antd'
 import styled from 'styled-components'
 
-const CustomDivider = styled(Divider)`
+export const CustomDivider = styled(Divider)`
   && {
     border-color: ${({ theme }) => theme.text};
     position: sticky;
@@ -16,5 +16,3 @@ const CustomDivider = styled(Divider)`
     font-size: 24px;
   }
 `
-
-export default CustomDivider

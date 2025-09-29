@@ -1,5 +1,5 @@
 import { useTypedSelector } from './useTypedSelector'
 
-export default function useTheme() {
+export function useTheme() {
   return useTypedSelector((state) => state.theme)
 }

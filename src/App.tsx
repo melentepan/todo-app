@@ -1,14 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
-import Homepage from './pages/HomePage'
-import Layout from './components/Layout/Layout'
-import RegistrationPage from './pages/RegistrationPage'
-import LoginPage from './pages/LoginPage'
-import NotFoundPage from './pages/NotFoundPage'
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
-import ProfilePage from './pages/ProfilePage'
-import PublicRoute from './components/PublicRoute/PublicRoute'
+import { Layout, ProtectedRoute, PublicRoute } from '@components'
+import { Homepage, LoginPage, NotFoundPage, ProfilePage, RegistrationPage } from '@pages'
 
-function App() {
+export function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
@@ -25,5 +19,3 @@ function App() {
     </Routes>
   )
 }
-
-export default App

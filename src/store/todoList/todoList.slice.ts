@@ -149,5 +149,5 @@ const todoListSlice = createSlice({
   },
 })
 
-export default todoListSlice.reducer
+export const todoListReducer = todoListSlice.reducer
 export const { setEditingTodo, setPage, setLimit } = todoListSlice.actions

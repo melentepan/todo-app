@@ -6,7 +6,7 @@ interface MessageProviderProps {
   children: ReactNode
 }
 
-export default function MessageProvider({ children }: MessageProviderProps) {
+export function MessageProvider({ children }: MessageProviderProps) {
   const [messageApi, contextHolder] = message.useMessage()
 
   useEffect(() => {
